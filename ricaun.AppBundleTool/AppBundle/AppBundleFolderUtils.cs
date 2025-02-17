@@ -29,7 +29,7 @@ namespace ricaun.AppBundleTool.AppBundle
             return new Dictionary<AppBundleFolder, Environment.SpecialFolder>
             {
                 { AppBundleFolder.AppData, Environment.SpecialFolder.ApplicationData },
-                //{ AppBundleFolder.ProgramData, Environment.SpecialFolder.CommonApplicationData },
+                { AppBundleFolder.ProgramData, Environment.SpecialFolder.CommonApplicationData },
                 { AppBundleFolder.ProgramFiles, Environment.SpecialFolder.ProgramFiles }
             };
         }
