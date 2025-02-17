@@ -36,6 +36,18 @@ namespace ricaun.AppBundleTool.PackageContents
         }
 
         /// <summary>
+        /// Converts the application package to a string representation.
+        /// </summary>
+        /// <param name="applicationPackage">The application package to convert.</param>
+        /// <returns>A string representation of the application package, or an empty string if the application package is null.</returns>
+        public static string AsString(this ApplicationPackage applicationPackage)
+        {
+            if (applicationPackage is null) return string.Empty;
+
+            return $"{applicationPackage.Name} {applicationPackage.AppVersion}";
+        }
+
+        /// <summary>
         /// Finds the component entries in the application package that match the specified platform, operating system, and minimum series version.
         /// </summary>
         /// <param name="applicationPackage">The application package to search.</param>

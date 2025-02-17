@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ricaun.AppBundleTool.AppBundle
 {
-    internal class AppBundleFolderUtils
+    internal static class AppBundleFolderUtils
     {
         public static bool TyrGetAppBundleFolder(string folder, out AppBundleFolder appBundleFolder)
         {
@@ -29,9 +29,15 @@ namespace ricaun.AppBundleTool.AppBundle
             return new Dictionary<AppBundleFolder, Environment.SpecialFolder>
             {
                 { AppBundleFolder.AppData, Environment.SpecialFolder.ApplicationData },
-                { AppBundleFolder.ProgramData, Environment.SpecialFolder.CommonApplicationData },
+                //{ AppBundleFolder.ProgramData, Environment.SpecialFolder.CommonApplicationData },
                 { AppBundleFolder.ProgramFiles, Environment.SpecialFolder.ProgramFiles }
             };
+        }
+
+        public static string GetApplicationPlugins(this AppBundleFolder appBundleFolder)
+        {
+            var specialFolders = Get();
+            return specialFolders[appBundleFolder].GetApplicationPlugins();
         }
     }
 }

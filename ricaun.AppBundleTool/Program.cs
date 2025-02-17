@@ -40,12 +40,39 @@ namespace ricaun.AppBundleTool
 
                     appBundleName = Path.GetFileNameWithoutExtension(options.App);
                     Console.WriteLine($"Install '{appBundleName}'");
+
+                    var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
+                    var applicationPluginsFolder = AppBundleFolder.AppData.GetApplicationPlugins();
+                    if (appBundle != null)
+                    {
+                        applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
+                    }
+                    var bundleUrl = options.App;
+                    Console.WriteLine($"DownloadBundle: {bundleUrl}");
+                    ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, null, (message) =>
+                    {
+                        //Console.WriteLine(message);
+                    });
+                    Console.WriteLine("---");
+                    AppBundle.AppBundleUtils.FindAppBundle(appBundleName)?.Show();
                 }
                 else if (options.Uninstall)
                 {
                     if (Path.GetExtension(appBundleName) == ".zip")
                         appBundleName = Path.GetFileNameWithoutExtension(options.App);
 
+                    var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
+
+                    if (appBundle is null)
+                    {
+                        Console.WriteLine($"AppBundle '{appBundleName}' not found.");
+                        return;
+                    }
+
+                    appBundle.Show();
+
+                    var applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
+                    ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundleName);
                     Console.WriteLine($"Uninstall '{appBundleName}'");
                 }
                 else
@@ -53,21 +80,29 @@ namespace ricaun.AppBundleTool
                     if (Path.GetExtension(appBundleName) == ".zip")
                         appBundleName = Path.GetFileNameWithoutExtension(options.App);
 
-                    Console.WriteLine($"App '{appBundleName}'");
+                    var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
+
+                    if (appBundle is null)
+                    {
+                        Console.WriteLine($"AppBundle '{appBundleName}' not found.");
+                        return;
+                    }
+
+                    appBundle.Show();
                 }
             }
         }
 
         public static void Show()
         {
-            var bundles = AppBundle.ApplicationPluginsUtils.GetAppBundles();
+            var bundles = AppBundle.AppBundleUtils.GetAppBundles();
 
-            var appBundleModels = bundles.Select(e => new AppBundleInfo(e))
+            var appBundles = bundles.Select(e => new AppBundleInfo(e))
                 .Where(e => e.IsValid());
 
-            foreach (var appBundleModel in appBundleModels)
+            foreach (var appBundle in appBundles)
             {
-                Console.WriteLine(appBundleModel);
+                Console.WriteLine(appBundle);
             }
         }
 

@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ricaun.AppBundleTool.AppBundle
 {
-    internal static class ApplicationPluginsUtils
+    internal static class AppBundleUtils
     {
         private const string SearchBundle = "*.bundle";
         public const string PackageContents = "PackageContents.xml";
 
-        private static string GetApplicationPlugins(Environment.SpecialFolder specialFolder)
+        public static string GetApplicationPlugins(this Environment.SpecialFolder specialFolder)
         {
             return Path.Combine(Environment.GetFolderPath(specialFolder), "Autodesk", "ApplicationPlugins");
+        }
+
+        public static AppBundleInfo FindAppBundle(string appBundleName)
+        {
+            var bundles = GetAppBundles();
+            return bundles.Select(e => new AppBundleInfo(e)).FirstOrDefault(e => e.Name == appBundleName);
         }
 
         public static string[] GetAppBundles()

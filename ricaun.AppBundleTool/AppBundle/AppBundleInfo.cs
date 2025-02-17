@@ -15,7 +15,7 @@ namespace ricaun.AppBundleTool.AppBundle
         {
             PathBundle = pathBundle;
             Name = Path.GetFileName(pathBundle);
-            PathPackageContents = Path.Combine(pathBundle, ApplicationPluginsUtils.PackageContents);
+            PathPackageContents = Path.Combine(pathBundle, AppBundleUtils.PackageContents);
             if (AppBundleFolderUtils.TyrGetAppBundleFolder(pathBundle, out AppBundleFolder appBundleFolder))
             {
                 AppBundleFolder = appBundleFolder;
