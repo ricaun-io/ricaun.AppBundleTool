@@ -13,8 +13,32 @@ dotnet tool install --global ricaun.AppBundleTool
 
 ## Tool Commands
 ### List
+
+Command `-l` and `--lint` to list all installed tools.
+
 ```bash
-AppBundleTool --list
+AppBundleTool -l
+```
+
+### AppBundle information
+
+Command `-a` and `--app` to show information about a bundle.
+```bash
+AppBundleTool -a <bundle-path.zip or bundle-name>
+```
+
+### Install
+
+Command `-i` and `--install` to install a tool.
+```bash
+AppBundleTool -a <bundle-path.zip> -i
+```
+
+### Uninstall
+
+Command `-u` and `--uninstall` to uninstall a tool.
+```bash
+AppBundleTool -a <bundle-path.zip or bundle-name> -u
 ```
 
 ## License
