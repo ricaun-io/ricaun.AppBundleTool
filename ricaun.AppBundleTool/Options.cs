@@ -32,11 +32,11 @@ namespace ricaun.AppBundleTool
         /// </summary>
         [Option('u', "uninstall", Required = false, HelpText = "Uninstall AppBundle.")]
         public bool Uninstall { get; set; }
-        /// <summary>
-        /// Force to install AppBundle.
-        /// </summary>
-        [Option('f', "force", Required = false, HelpText = "Force to install AppBundle.")]
-        public bool ForceInstall { get; set; }
+        ///// <summary>
+        ///// Force to install AppBundle.
+        ///// </summary>
+        //[Option('f', "force", Required = false, HelpText = "Force to install AppBundle.")]
+        //public bool ForceInstall { get; set; }
         /// <summary>
         /// Show list of available AppBundle.
         /// </summary>

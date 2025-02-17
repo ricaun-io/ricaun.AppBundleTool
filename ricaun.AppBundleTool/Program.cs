@@ -10,15 +10,16 @@ namespace ricaun.AppBundleTool
 {
     internal class Program
     {
+        static string displayHelp { get; set; }
         static void Main(string[] args)
         {
 #if DEBUG
             Show();
 #endif
             var parser = Options.Parser.ParseArguments<Options>(args);
-            parser
-                .WithParsed<Options>(ExecuteCommand)
-                .WithNotParsed(ExecuteError);
+            displayHelp = DisplayHelp(parser);
+            parser.WithParsed<Options>(ExecuteCommand)
+                  .WithNotParsed(ExecuteError);
         }
 
         private static void ExecuteCommand(Options options)
@@ -27,7 +28,7 @@ namespace ricaun.AppBundleTool
             {
                 Show();
             }
-            if (string.IsNullOrWhiteSpace(options.App) == false)
+            else if (string.IsNullOrWhiteSpace(options.App) == false)
             {
                 var appBundleName = Path.GetFileName(options.App);
                 if (options.Install)
@@ -90,6 +91,10 @@ namespace ricaun.AppBundleTool
 
                     appBundle.Show();
                 }
+            }
+            else
+            {
+                Console.WriteLine(displayHelp);
             }
         }
 
