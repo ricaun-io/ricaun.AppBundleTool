@@ -17,17 +17,29 @@ namespace ricaun.AppBundleTool.AppBundle
 
         public static AppBundleInfo FindAppBundle(string appBundleName)
         {
-            var bundles = GetAppBundles();
+            var bundles = GetAppBundleFolders();
             return bundles.Select(e => new AppBundleInfo(e)).FirstOrDefault(e => e.Name == appBundleName);
         }
 
-        public static string[] GetAppBundles()
+        /// <summary>
+        /// Retrieves all valid AppBundles.
+        /// </summary>
+        /// <returns>An array of <see cref="AppBundleInfo"/> representing the valid AppBundles.</returns>
+        public static AppBundleInfo[] GetAppBundles()
         {
-            var specialFolders = AppBundleFolderUtils.GetSpecialFolders();
-            return GetAppBundles(specialFolders);
+            var bundles = GetAppBundleFolders();
+            return bundles.Select(e => new AppBundleInfo(e))
+                .Where(e => e.IsValid())
+                .ToArray();
         }
 
-        public static string[] GetAppBundles(Environment.SpecialFolder[] specialFolders)
+        public static string[] GetAppBundleFolders()
+        {
+            var specialFolders = AppBundleFolderUtils.GetSpecialFolders();
+            return GetAppBundleFolders(specialFolders);
+        }
+
+        public static string[] GetAppBundleFolders(Environment.SpecialFolder[] specialFolders)
         {
             var bundles = new List<string>();
 

@@ -28,9 +28,16 @@ namespace ricaun.AppBundleTool.AppBundle
         {
             return File.Exists(PathPackageContents);
         }
+
+        private string GetWriteAccessMessage()
+        {
+            return WriteAccess ? "" : "(Administrator Permission Required)";
+        }
+
         public override string ToString()
         {
-            return string.Format("{0} \t{1} \t{2}", Name, AppBundleFolder, WriteAccess);
+            var writeAccess = GetWriteAccessMessage();
+            return string.Format("[{0}] \t{1} \t{2}", AppBundleFolder, Name, writeAccess);
         }
     }
 }

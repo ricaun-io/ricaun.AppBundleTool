@@ -100,10 +100,7 @@ namespace ricaun.AppBundleTool
 
         public static void Show()
         {
-            var bundles = AppBundle.AppBundleUtils.GetAppBundles();
-
-            var appBundles = bundles.Select(e => new AppBundleInfo(e))
-                .Where(e => e.IsValid());
+            var appBundles = AppBundleUtils.GetAppBundles();
 
             foreach (var appBundle in appBundles)
             {
