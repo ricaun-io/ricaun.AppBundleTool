@@ -18,6 +18,11 @@ namespace ricaun.AppBundleTool
         }
         #endregion
         /// <summary>
+        /// Gets or sets the AppBundle file to be installed.
+        /// </summary>
+        [Option('a', "app", Required = false, HelpText = "AppBundle file to be installed.")]
+        public string App { get; set; }
+        /// <summary>
         /// Install AppBundle.
         /// </summary>
         [Option('i', "install", Required = false, HelpText = "Install AppBundle.")]

@@ -3,6 +3,7 @@ using ricaun.AppBundleTool.AppBundle;
 using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ricaun.AppBundleTool
@@ -25,6 +26,35 @@ namespace ricaun.AppBundleTool
             if (options.Show)
             {
                 Show();
+            }
+            if (string.IsNullOrWhiteSpace(options.App) == false)
+            {
+                var appBundleName = Path.GetFileName(options.App);
+                if (options.Install)
+                {
+                    if (Path.GetExtension(appBundleName) != ".zip")
+                    {
+                        Console.WriteLine($"'{appBundleName}' need to be 'zip' extension.");
+                        return;
+                    }
+
+                    appBundleName = Path.GetFileNameWithoutExtension(options.App);
+                    Console.WriteLine($"Install '{appBundleName}'");
+                }
+                else if (options.Uninstall)
+                {
+                    if (Path.GetExtension(appBundleName) == ".zip")
+                        appBundleName = Path.GetFileNameWithoutExtension(options.App);
+
+                    Console.WriteLine($"Uninstall '{appBundleName}'");
+                }
+                else
+                {
+                    if (Path.GetExtension(appBundleName) == ".zip")
+                        appBundleName = Path.GetFileNameWithoutExtension(options.App);
+
+                    Console.WriteLine($"App '{appBundleName}'");
+                }
             }
         }
 
