@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{A5D13B37-DD47-442A-AB51-EED6B3832B26}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ricaun.AppBundleTool", "ricaun.AppBundleTool\ricaun.AppBundleTool.csproj", "{FB8D90B7-1370-4E50-91EE-0B0FB45B373E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Build\Build.csproj", "{A3745FFF-BAF2-4372-B296-69189D272969}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB8D90B7-1370-4E50-91EE-0B0FB45B373E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8D90B7-1370-4E50-91EE-0B0FB45B373E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8D90B7-1370-4E50-91EE-0B0FB45B373E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8D90B7-1370-4E50-91EE-0B0FB45B373E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3745FFF-BAF2-4372-B296-69189D272969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3745FFF-BAF2-4372-B296-69189D272969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
