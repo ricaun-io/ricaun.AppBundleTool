@@ -50,9 +50,13 @@ namespace ricaun.AppBundleTool
                     }
                     var bundleUrl = options.App;
                     Console.WriteLine($"DownloadBundle: {bundleUrl}");
-                    ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, null, (message) =>
+                    ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
+                        if (options.Verbosity)
+                            Console.WriteLine(ex);
+                    }, (message) =>
                     {
-                        //Console.WriteLine(message);
+                        if (options.Verbosity)
+                            Console.WriteLine(message);
                     });
                     Console.WriteLine("---");
                     AppBundle.AppBundleUtils.FindAppBundle(appBundleName)?.Show();

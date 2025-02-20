@@ -12,6 +12,16 @@ namespace ricaun.AppBundleTool.AppBundle
             Console.WriteLine($"PathBundle: \t{appBundleInfo.PathBundle}");
             Console.WriteLine($"PathPackageContents: \t{appBundleInfo.PathPackageContents}");
             Console.WriteLine($"ApplicationPackage: \t{appBundleInfo.ApplicationPackage.AsString()}");
+            if (appBundleInfo.ApplicationPackage is not null)
+            {
+                foreach (var component in appBundleInfo.ApplicationPackage.Components)
+                {
+                    foreach (var componentEntry in component.ComponentEntry)
+                    {
+                        Console.WriteLine($" ComponentEntry: {component.RuntimeRequirements.Platform}  {component.RuntimeRequirements.SeriesMin} {component.RuntimeRequirements.SeriesMax} \t{componentEntry.AppName} \t{componentEntry.ModuleName}");
+                    }
+                }
+            }
         }
     }
 }
