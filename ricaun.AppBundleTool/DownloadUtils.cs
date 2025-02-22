@@ -69,6 +69,9 @@ namespace ricaun.AppBundleTool
             var uri = new Uri(bundleUri);
             var appBundleName = Path.GetFileName(uri.LocalPath);
 
+            if (Path.GetExtension(appBundleName) != ".zip")
+                appBundleName += ".zip";
+
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
 

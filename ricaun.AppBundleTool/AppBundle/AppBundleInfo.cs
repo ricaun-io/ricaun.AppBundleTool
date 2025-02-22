@@ -1,5 +1,6 @@
 ﻿using ricaun.AppBundleTool.PackageContents;
 using System.IO;
+using System.Linq;
 
 namespace ricaun.AppBundleTool.AppBundle
 {
@@ -38,6 +39,25 @@ namespace ricaun.AppBundleTool.AppBundle
         {
             var writeAccess = GetWriteAccessMessage();
             return string.Format("[{0}] \t{1} \t{2}", AppBundleFolder, Name, writeAccess);
+        }
+
+        /// <summary>
+        /// Finds the application bundle in the specified folder.
+        /// </summary>
+        /// <param name="appBundleFolder">The folder to search for the application bundle.</param>
+        /// <returns>
+        /// An <see cref="AppBundleInfo"/> object representing the application bundle found in the specified folder,
+        /// or a new <see cref="AppBundleInfo"/> object if no application bundle is found.
+        /// </returns>
+        public static AppBundleInfo FindAppBundle(string appBundleFolder)
+        {
+            var packageContentsFile = Directory.GetFiles(appBundleFolder, AppBundleUtils.PackageContents, SearchOption.AllDirectories)
+                .FirstOrDefault();
+
+            if (packageContentsFile == null)
+                return new AppBundleInfo(appBundleFolder);
+
+            return new AppBundleInfo(Path.GetDirectoryName(packageContentsFile));
         }
     }
 }

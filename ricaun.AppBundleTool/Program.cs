@@ -60,14 +60,16 @@ namespace ricaun.AppBundleTool
                     if (Directory.Exists(bundlePathFolder))
                         Directory.Delete(bundlePathFolder, true);
 
-                    ZipFile.ExtractToDirectory(bundlePathZip, Path.GetDirectoryName(bundlePathZip), true);
+                    ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
 
                     Console.WriteLine(bundlePathFolder);
                    
                     Console.WriteLine("Downloaded....Finish");
 
-                    var appBundleInfo = new AppBundleInfo(bundlePathFolder);
-                    appBundleInfo.Show();
+                    var appBundleInfo = AppBundleInfo.FindAppBundle(bundlePathFolder);
+                    appBundleInfo?.Show();
+                    Console.WriteLine("---");
+                    Console.WriteLine("---");
 
                     //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
                     //    if (options.Verbosity)
