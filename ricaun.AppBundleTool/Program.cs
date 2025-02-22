@@ -4,6 +4,7 @@ using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 
 namespace ricaun.AppBundleTool
 {
@@ -54,7 +55,19 @@ namespace ricaun.AppBundleTool
 
                     var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
 
+                    // unzip file to folder
+                    var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
+                    if (Directory.Exists(bundlePathFolder))
+                        Directory.Delete(bundlePathFolder, true);
+
+                    ZipFile.ExtractToDirectory(bundlePathZip, Path.GetDirectoryName(bundlePathZip), true);
+
+                    Console.WriteLine(bundlePathFolder);
+                   
                     Console.WriteLine("Downloaded....Finish");
+
+                    var appBundleInfo = new AppBundleInfo(bundlePathFolder);
+                    appBundleInfo.Show();
 
                     //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
                     //    if (options.Verbosity)

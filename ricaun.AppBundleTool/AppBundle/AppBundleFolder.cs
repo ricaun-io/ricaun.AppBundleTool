@@ -2,6 +2,7 @@
 {
     enum AppBundleFolder
     {
+        None,
         AppData,
         ProgramData,
         ProgramFiles
