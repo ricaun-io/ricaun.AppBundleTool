@@ -4,7 +4,6 @@ using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace ricaun.AppBundleTool
 {
@@ -33,11 +32,11 @@ namespace ricaun.AppBundleTool
                 var appBundleName = Path.GetFileName(options.App);
                 if (options.Install)
                 {
-                    if (Path.GetExtension(appBundleName) != ".zip")
-                    {
-                        Console.WriteLine($"'{appBundleName}' need to be 'zip' extension.");
-                        return;
-                    }
+                    //if (Path.GetExtension(appBundleName) != ".zip")
+                    //{
+                    //    Console.WriteLine($"'{appBundleName}' need to be 'zip' extension.");
+                    //    return;
+                    //}
 
                     appBundleName = Path.GetFileNameWithoutExtension(options.App);
                     Console.WriteLine($"Install '{appBundleName}'");
@@ -50,15 +49,24 @@ namespace ricaun.AppBundleTool
                     }
                     var bundleUrl = options.App;
                     Console.WriteLine($"DownloadBundle: {bundleUrl}");
-                    ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
-                        if (options.Verbosity)
-                            Console.WriteLine(ex);
-                    }, (message) =>
-                    {
-                        if (options.Verbosity)
-                            Console.WriteLine(message);
-                    });
+
+                    Console.WriteLine("Downloaded....");
+
+                    var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
+
+                    Console.WriteLine("Downloaded....Finish");
+
+                    //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
+                    //    if (options.Verbosity)
+                    //        Console.WriteLine(ex);
+                    //}, (message) =>
+                    //{
+                    //    if (options.Verbosity)
+                    //        Console.WriteLine(message);
+                    //});
+
                     Console.WriteLine("---");
+
                     AppBundle.AppBundleUtils.FindAppBundle(appBundleName)?.Show();
                 }
                 else if (options.Uninstall)
