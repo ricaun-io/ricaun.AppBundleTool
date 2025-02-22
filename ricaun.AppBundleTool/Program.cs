@@ -43,7 +43,7 @@ namespace ricaun.AppBundleTool
                     appBundleName = Path.GetFileNameWithoutExtension(options.App);
                     Console.WriteLine($"Install '{appBundleName}'");
 
-                    var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
+                    var appBundle = AppBundleUtils.FindAppBundle(appBundleName);
                     var applicationPluginsFolder = AppBundleFolder.AppData.GetApplicationPlugins();
                     if (appBundle != null)
                     {
@@ -83,18 +83,34 @@ namespace ricaun.AppBundleTool
 
                         Console.WriteLine("---");
 
+                        Console.WriteLine(applicationPluginsFolder);
+                        // Copy all files of the folder to a different folder.
+
+                        if (!appBundleInfo.IsValid())
+                        {
+                            appBundleInfo.PathBundle = Path.Combine(applicationPluginsFolder, appBundleName);
+                        }
+
+                        DirectoryUtils.CopyFilesRecursively(appBundleInfoTemp.PathBundle, appBundleInfo.PathBundle);
+
+                        //Console.WriteLine(bundlePathZip);
+
+                        //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundlePathZip, (ex) =>
+                        //{
+                        //    if (options.Verbosity)
+                        //        Console.WriteLine(ex);
+                        //}, (message) =>
+                        //{
+                        //    if (options.Verbosity)
+                        //        Console.WriteLine(message);
+                        //});
+
+                        appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
                         appBundleInfo?.Show();
                     }
 
 
-                    //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
-                    //    if (options.Verbosity)
-                    //        Console.WriteLine(ex);
-                    //}, (message) =>
-                    //{
-                    //    if (options.Verbosity)
-                    //        Console.WriteLine(message);
-                    //});
+                    
                 }
                 else if (options.Uninstall)
                 {

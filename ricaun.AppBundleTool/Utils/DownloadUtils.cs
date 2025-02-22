@@ -14,7 +14,7 @@ namespace ricaun.AppBundleTool.Utils
         /// The name of the temporary folder used for downloads.
         /// </summary>
         public const string TempFolder = "ricaun.AppBundleTool";
-        private const int CACHE_TOTAL_MINUTES = 5;
+        private const int CACHE_TOTAL_MINUTES = 1;
 
         /// <summary>
         /// Gets the path to the temporary folder, creating it if it does not exist.

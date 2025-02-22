@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0] / 2025-02-17
 - Add `PackageContents` to parse Autodesk `PackageContents.xml` file.
 - Add `DownloadUtils` to download zip files of bundle.
+- Add `CopyFilesRecursively` to copy files from one directory to another.
 
 [vNext]: ../../compare/1.0.0...HEAD
 [1.0.0]: ../../compare/1.0.0
