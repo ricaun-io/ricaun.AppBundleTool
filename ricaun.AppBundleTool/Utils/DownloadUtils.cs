@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ricaun.AppBundleTool
+namespace ricaun.AppBundleTool.Utils
 {
     /// <summary>
     /// Provides utility methods for downloading files and managing temporary folders.
@@ -14,6 +14,7 @@ namespace ricaun.AppBundleTool
         /// The name of the temporary folder used for downloads.
         /// </summary>
         public const string TempFolder = "ricaun.AppBundleTool";
+        private const int CACHE_TOTAL_MINUTES = 5;
 
         /// <summary>
         /// Gets the path to the temporary folder, creating it if it does not exist.
@@ -50,11 +51,12 @@ namespace ricaun.AppBundleTool
         /// </summary>
         /// <param name="bundleUri">The URI of the file to download.</param>
         /// <param name="authentication">Optional authentication token.</param>
+        /// <param name="cacheTotalMinutes">The number of minutes to cache the downloaded file before re-downloading.</param>
         /// <returns>The path to the downloaded file.</returns>
-        public static async Task<string> DownloadAsync(string bundleUri, string authentication = null)
+        public static async Task<string> DownloadAsync(string bundleUri, string authentication = null, int cacheTotalMinutes = CACHE_TOTAL_MINUTES)
         {
             var tempFolder = GetTempFolder();
-            return await DownloadAsync(tempFolder, bundleUri, authentication);
+            return await DownloadAsync(tempFolder, bundleUri, authentication, cacheTotalMinutes);
         }
 
         /// <summary>
@@ -63,14 +65,28 @@ namespace ricaun.AppBundleTool
         /// <param name="tempFolder">The folder to download the file to.</param>
         /// <param name="bundleUri">The URI of the file to download.</param>
         /// <param name="authentication">Optional authentication token.</param>
+        /// <param name="cacheTotalMinutes">The number of minutes to cache the downloaded file before re-downloading.</param>
         /// <returns>The path to the downloaded file.</returns>
-        public static async Task<string> DownloadAsync(string tempFolder, string bundleUri, string authentication = null)
+        private static async Task<string> DownloadAsync(string tempFolder, string bundleUri, string authentication = null, int cacheTotalMinutes = CACHE_TOTAL_MINUTES)
         {
             var uri = new Uri(bundleUri);
             var appBundleName = Path.GetFileName(uri.LocalPath);
 
             if (Path.GetExtension(appBundleName) != ".zip")
                 appBundleName += ".zip";
+
+            var bundlePath = Path.Combine(tempFolder, appBundleName);
+
+            if (File.Exists(bundlePath))
+            {
+                var lastTime = File.GetLastWriteTime(bundlePath);
+                var now = DateTime.Now;
+                var diff = now - lastTime;
+                if (diff.TotalMinutes < cacheTotalMinutes)
+                {
+                    return bundlePath;
+                }
+            }
 
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
@@ -79,7 +95,6 @@ namespace ricaun.AppBundleTool
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authentication}");
 
             var response = await client.GetAsync(bundleUri);
-            var bundlePath = Path.Combine(tempFolder, appBundleName);
 
             using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
             await response.Content.CopyToAsync(fileStream);

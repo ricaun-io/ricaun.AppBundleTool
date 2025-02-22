@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using ricaun.AppBundleTool.AppBundle;
+using ricaun.AppBundleTool.Utils;
 using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
@@ -71,6 +72,8 @@ namespace ricaun.AppBundleTool
                     Console.WriteLine("---");
                     Console.WriteLine("---");
 
+                    appBundleName = appBundleInfo.ApplicationPackage.Name;
+
                     //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
                     //    if (options.Verbosity)
                     //        Console.WriteLine(ex);
@@ -79,6 +82,8 @@ namespace ricaun.AppBundleTool
                     //    if (options.Verbosity)
                     //        Console.WriteLine(message);
                     //});
+
+                    Console.WriteLine(appBundleName);
 
                     Console.WriteLine("---");
 
