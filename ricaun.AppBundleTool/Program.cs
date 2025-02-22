@@ -64,15 +64,28 @@ namespace ricaun.AppBundleTool
                     ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
 
                     Console.WriteLine(bundlePathFolder);
-                   
+
                     Console.WriteLine("Downloaded....Finish");
 
-                    var appBundleInfo = AppBundleInfo.FindAppBundle(bundlePathFolder);
-                    appBundleInfo?.Show();
-                    Console.WriteLine("---");
+                    var appBundleInfoTemp = AppBundleInfo.FindAppBundle(bundlePathFolder);
+                    appBundleInfoTemp?.Show();
                     Console.WriteLine("---");
 
-                    appBundleName = appBundleInfo.ApplicationPackage.Name;
+                    if (appBundleInfoTemp.IsValid())
+                    {
+                        appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
+
+                        Console.WriteLine(appBundleName);
+
+                        var appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
+
+                        Console.WriteLine($"{appBundleInfoTemp.ApplicationPackage.AppVersion} -> {appBundleInfo?.ApplicationPackage.AppVersion}");
+
+                        Console.WriteLine("---");
+
+                        appBundleInfo?.Show();
+                    }
+
 
                     //ApplicationPluginsUtils.DownloadBundle(applicationPluginsFolder, bundleUrl, (ex) => {
                     //    if (options.Verbosity)
@@ -82,12 +95,6 @@ namespace ricaun.AppBundleTool
                     //    if (options.Verbosity)
                     //        Console.WriteLine(message);
                     //});
-
-                    Console.WriteLine(appBundleName);
-
-                    Console.WriteLine("---");
-
-                    AppBundle.AppBundleUtils.FindAppBundle(appBundleName)?.Show();
                 }
                 else if (options.Uninstall)
                 {

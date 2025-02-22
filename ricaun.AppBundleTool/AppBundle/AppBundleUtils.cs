@@ -18,7 +18,7 @@ namespace ricaun.AppBundleTool.AppBundle
         public static AppBundleInfo FindAppBundle(string appBundleName)
         {
             var bundles = GetAppBundleFolders();
-            return bundles.Select(e => new AppBundleInfo(e)).FirstOrDefault(e => e.Name == appBundleName);
+            return bundles.Select(e => new AppBundleInfo(e)).FirstOrDefault(e => e.ApplicationPackage?.Name == appBundleName);
         }
 
         /// <summary>
