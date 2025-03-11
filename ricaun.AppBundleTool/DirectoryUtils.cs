@@ -15,20 +15,21 @@ namespace ricaun.AppBundleTool
             {
                 Directory.CreateDirectory(destinationPathFolder);
             }
-            var files = Directory.GetFiles(sourcePathFolder);
-            foreach (var file in files)
-            {
-                var fileName = Path.GetFileName(file);
-                var destFile = Path.Combine(destinationPathFolder, fileName);
-                Console.WriteLine($"Copy: {destFile}");
-                File.Copy(file, destFile, overwrite);
-            }
             var folders = Directory.GetDirectories(sourcePathFolder);
             foreach (var folder in folders)
             {
                 var folderName = Path.GetFileName(folder);
                 var destFolder = Path.Combine(destinationPathFolder, folderName);
                 CopyFilesRecursively(folder, destFolder, overwrite);
+            }
+            var files = Directory.GetFiles(sourcePathFolder);
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                var destFile = Path.Combine(destinationPathFolder, fileName);
+                if (Program.Verbosity)
+                    Console.WriteLine($"Copy: {destFile}");
+                File.Copy(file, destFile, overwrite);
             }
         }
     }

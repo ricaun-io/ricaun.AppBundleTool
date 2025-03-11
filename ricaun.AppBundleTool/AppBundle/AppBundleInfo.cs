@@ -38,7 +38,7 @@ namespace ricaun.AppBundleTool.AppBundle
         public override string ToString()
         {
             var writeAccess = GetWriteAccessMessage();
-            return string.Format("[{0}] \t{1} \t{2}", AppBundleFolder, Name, writeAccess);
+            return string.Format("[{0}] \t{1} \t{2}", AppBundleFolder, ApplicationPackage?.Name ?? Name, writeAccess);
         }
 
         /// <summary>
