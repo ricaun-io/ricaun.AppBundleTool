@@ -1,9 +1,10 @@
 # ricaun.AppBundleTool
 
-[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-blue)](../..)
+[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-blue)](https://github.com/ricaun-io/ricaun.AppBundleTool)
 [![Nuke](https://img.shields.io/badge/Nuke-Build-blue)](https://nuke.build/)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Build](../../actions/workflows/Build.yml/badge.svg)](../../actions)
+[![Build](https://github.com/ricaun-io/ricaun.AppBundleTool/actions/workflows/Build.yml/badge.svg)](https://github.com/ricaun-io/ricaun.AppBundleTool/actions)
+[![Release](https://img.shields.io/nuget/v/ricaun.AppBundleTool?logo=nuget&label=release&color=blue)](https://www.nuget.org/packages/ricaun.AppBundleTool)
 
 Install/Uninstall Autodesk AppBundle command line tool.
 
@@ -14,6 +15,9 @@ dotnet tool install --global ricaun.AppBundleTool
 ```
 
 ## Tool Commands
+
+The `AppBundleTool` command line tool provides the following commands:
+
 ### List
 
 Command `-l` and `--lint` to list all installed bundle.
@@ -49,4 +53,4 @@ This project is [licensed](LICENSE) under the [MIT License](https://en.wikipedia
 
 ---
 
-Do you like this project? Please [star this project on GitHub](../../stargazers)!
+Do you like this project? Please [star this project on GitHub](https://github.com/ricaun-io/ricaun.AppBundleTool/stargazers)!
