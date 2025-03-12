@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] / 2025-02-17
+### Features
+- Install/Uninstall bundle.
+### Updates
 - Show information about bundle.
 - Add `PackageContents` to parse Autodesk `PackageContents.xml` file.
 - Add `DownloadUtils` to download zip files of bundle.

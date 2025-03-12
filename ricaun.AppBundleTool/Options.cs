@@ -43,7 +43,10 @@ namespace ricaun.AppBundleTool
         [Option('l', "list", Required = false, HelpText = "Show list of available AppBundle.")]
         public bool Show { get; set; }
 
-        [Option('v', "verbosity", Required = false)]
+        /// <summary>
+        /// Show more information.
+        /// </summary>
+        [Option('v', "verbosity", Required = false, HelpText = "Show more information.")]
         public bool Verbosity { get; set; }
     }
 }

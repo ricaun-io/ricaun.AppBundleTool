@@ -5,6 +5,8 @@
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build](../../actions/workflows/Build.yml/badge.svg)](../../actions)
 
+Install/Uninstall Autodesk AppBundle command line tool.
+
 ## Install Tool
 
 ```bash
@@ -14,7 +16,7 @@ dotnet tool install --global ricaun.AppBundleTool
 ## Tool Commands
 ### List
 
-Command `-l` and `--lint` to list all installed tools.
+Command `-l` and `--lint` to list all installed bundle.
 
 ```bash
 AppBundleTool -l

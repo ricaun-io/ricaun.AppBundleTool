@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ricaun.AppBundleTool
+namespace ricaun.AppBundleTool.Utils
 {
     internal class DirectoryUtils
     {
@@ -27,8 +27,10 @@ namespace ricaun.AppBundleTool
             {
                 var fileName = Path.GetFileName(file);
                 var destFile = Path.Combine(destinationPathFolder, fileName);
+
                 if (Program.Verbosity)
                     Console.WriteLine($"Copy: {destFile}");
+
                 File.Copy(file, destFile, overwrite);
             }
         }
