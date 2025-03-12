@@ -6,7 +6,7 @@
 [![Build](https://github.com/ricaun-io/ricaun.AppBundleTool/actions/workflows/Build.yml/badge.svg)](https://github.com/ricaun-io/ricaun.AppBundleTool/actions)
 [![Release](https://img.shields.io/nuget/v/ricaun.AppBundleTool?logo=nuget&label=release&color=blue)](https://www.nuget.org/packages/ricaun.AppBundleTool)
 
-Install/Uninstall Autodesk AppBundle command line tool.
+Command line tool to Install/Uninstall Autodesk AppBundle.
 
 ## Install Tool
 
