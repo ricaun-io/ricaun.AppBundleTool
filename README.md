@@ -47,6 +47,22 @@ Command `-u` and `--uninstall` to uninstall a tool.
 AppBundleTool -a <bundle-path.zip or bundle-name> -u
 ```
 
+## Example
+
+The following example shows how to install a bundle from a URL in the [RevitAddin.CommandLoader](https://github.com/ricaun-io/RevitAddin.CommandLoader) releases.
+
+### Latest
+
+```bash
+AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle.zip -i
+```
+
+### Specific version
+
+```bash
+AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/download/1.1.0/RevitAddin.CommandLoader.bundle.zip -i
+```
+
 ## License
 
 This project is [licensed](LICENSE) under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
