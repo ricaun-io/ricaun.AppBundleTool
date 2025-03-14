@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using ricaun.AppBundleTool.AppBundle;
+using ricaun.AppBundleTool.PackageContents;
 using ricaun.AppBundleTool.Utils;
 using ricaun.Revit.Installation;
 using System;
@@ -36,65 +37,39 @@ namespace ricaun.AppBundleTool
                 var appBundleName = Path.GetFileName(options.App);
                 if (options.Install)
                 {
-                    //if (Path.GetExtension(appBundleName) != ".zip")
-                    //{
-                    //    Console.WriteLine($"'{appBundleName}' need to be 'zip' extension.");
-                    //    return;
-                    //}
-
-                    appBundleName = Path.GetFileNameWithoutExtension(options.App);
-                    Console.WriteLine($"Install '{appBundleName}'");
-
-                    var appBundle = AppBundleUtils.FindAppBundle(appBundleName);
-                    var applicationPluginsFolder = AppBundleFolder.AppData.GetApplicationPlugins();
-                    if (appBundle != null)
+                    if (Path.GetExtension(appBundleName) != ".zip")
                     {
-                        applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
+                        Console.WriteLine($"'{appBundleName}' need to be 'zip' extension.");
+                        return;
                     }
+
                     var bundleUrl = options.App;
-                    Console.WriteLine($"DownloadBundle: {bundleUrl}");
+                    var appBundleInfoTemp = DownloadAppBundleInfo(bundleUrl);
+                    var applicationPluginsFolder = AppBundleFolder.AppData.GetApplicationPlugins();
 
-                    Console.WriteLine("Downloaded....");
+                    appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
 
-                    var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
-
-                    // unzip file to folder
-                    var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
-                    if (Directory.Exists(bundlePathFolder))
-                        Directory.Delete(bundlePathFolder, true);
-
-                    ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
-
-                    Console.WriteLine(bundlePathFolder);
-
-                    Console.WriteLine("Downloaded....Finish");
-
-                    var appBundleInfoTemp = AppBundleInfo.FindAppBundle(bundlePathFolder);
-                    appBundleInfoTemp?.Show();
-                    Console.WriteLine("---");
+                    if (Verbosity)
+                        appBundleInfoTemp?.Show();
 
                     if (appBundleInfoTemp.IsValid())
                     {
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
 
-                        Console.WriteLine(appBundleName);
+                        Console.WriteLine($"Install: {appBundleInfoTemp.ApplicationPackage.AsString()}");
 
-                        var appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
+                        var appBundleInstalled = AppBundleUtils.FindAppBundleByName(appBundleName);
+                        if (appBundleInstalled is not null)
+                        {
+                            applicationPluginsFolder = appBundleInstalled.AppBundleFolder.GetApplicationPlugins();
+                            Console.WriteLine($"Replace: {appBundleInstalled.ApplicationPackage.AsString()}");
+                        }
 
-                        Console.WriteLine($"{appBundleInfoTemp.ApplicationPackage.AppVersion} -> {appBundleInfo?.ApplicationPackage.AppVersion}");
-
-                        Console.WriteLine("---");
-
-                        Console.WriteLine(applicationPluginsFolder);
                         // Copy all files of the folder to a different folder.
 
-                        if (appBundleInfo is not null)
+                        if (appBundleInstalled is not null)
                         {
-                            if (!appBundleInfo.IsValid())
-                            {
-                                appBundleInfo.PathBundle = Path.Combine(applicationPluginsFolder, appBundleName);
-                            }
-                            DirectoryUtils.CopyFilesRecursively(appBundleInfoTemp.PathBundle, appBundleInfo.PathBundle);
+                            DirectoryUtils.CopyFilesRecursively(appBundleInfoTemp.PathBundle, appBundleInstalled.PathBundle);
                         }
                         else
                         {
@@ -113,38 +88,16 @@ namespace ricaun.AppBundleTool
                         //    if (options.Verbosity)
                         //        Console.WriteLine(message);
                         //});
-
-                        appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
-                        appBundleInfo?.Show();
+                        Console.WriteLine("---");
                     }
-
-
-
+                    AppBundleUtils.FindAppBundleByName(appBundleName)?.Show();
                 }
                 else if (options.Uninstall)
                 {
                     if (Path.GetExtension(appBundleName) == ".zip")
                     {
                         var bundleUrl = options.App;
-                        Console.WriteLine($"DownloadBundle: {bundleUrl}");
-
-                        Console.WriteLine("Downloaded....");
-
-                        var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
-
-                        // unzip file to folder
-                        var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
-                        if (Directory.Exists(bundlePathFolder))
-                            Directory.Delete(bundlePathFolder, true);
-
-                        ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
-
-                        Console.WriteLine(bundlePathFolder);
-
-                        Console.WriteLine("Downloaded....Finish");
-                        var appBundleInfoTemp = AppBundleInfo.FindAppBundle(bundlePathFolder);
-                        appBundleInfoTemp?.Show();
-
+                        var appBundleInfoTemp = DownloadAppBundleInfo(bundleUrl);
                         if (appBundleInfoTemp is null)
                         {
                             Console.WriteLine($"AppBundle '{bundleUrl}' not found.");
@@ -162,64 +115,40 @@ namespace ricaun.AppBundleTool
                         }
                     }
 
-                    var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
-
+                    var appBundle = AppBundleUtils.FindAppBundleByName(appBundleName);
                     if (appBundle is null)
                     {
                         Console.WriteLine($"AppBundle '{appBundleName}' not found.");
                         return;
                     }
-
-                    appBundle.Show();
-
-                    Console.WriteLine(appBundle.Name);
-
                     var applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
+                    Console.WriteLine($"Uninstall: {appBundle.ApplicationPackage.AsString()}");
                     ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
-                    Console.WriteLine($"Uninstall '{appBundleName}'");
                 }
                 else if (Path.GetExtension(appBundleName) == ".zip")
                 {
                     var bundleUrl = options.App;
-                    Console.WriteLine($"DownloadBundle: {bundleUrl}");
-
-                    Console.WriteLine("Downloaded....");
-
-                    var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
-
-                    // unzip file to folder
-                    var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
-                    if (Directory.Exists(bundlePathFolder))
-                        Directory.Delete(bundlePathFolder, true);
-
-                    ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
-
-                    Console.WriteLine(bundlePathFolder);
-
-                    Console.WriteLine("Downloaded....Finish");
-
-                    var appBundleInfoTemp = AppBundleInfo.FindAppBundle(bundlePathFolder);
-                    appBundleInfoTemp?.Show();
-
+                    var appBundleInfoTemp = DownloadAppBundleInfo(bundleUrl);
                     if (appBundleInfoTemp.IsValid())
                     {
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
-
-                        Console.WriteLine(appBundleName);
-
-                        var appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
-
-                        Console.WriteLine($"{appBundleInfoTemp.ApplicationPackage.AppVersion} -> {appBundleInfo?.ApplicationPackage.AppVersion}");
-
-                        Console.WriteLine("---");
-
-                        appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
+                        var appBundleInfo = AppBundleUtils.FindAppBundleByName(appBundleName);
                         appBundleInfo?.Show();
+                        if (appBundleInfo is null)
+                        {
+                            Console.WriteLine($"AppBundle '{appBundleName}' not found.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"AppBundleInfo '{appBundleInfoTemp.Name}' not valid.");
+                        return;
                     }
                 }
                 else
                 {
-                    var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
+                    var appBundle = AppBundleUtils.FindAppBundleByName(appBundleName);
 
                     if (appBundle is null)
                     {
@@ -233,6 +162,33 @@ namespace ricaun.AppBundleTool
             else
             {
                 Console.WriteLine(displayHelp);
+            }
+        }
+
+        private static AppBundleInfo DownloadAppBundleInfo(string bundleUrl)
+        {
+            Console.WriteLine($"DownloadBundle: {bundleUrl}");
+            WriteLine("Downloaded....");
+
+            var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
+
+            // unzip file to folder
+            var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
+            if (Directory.Exists(bundlePathFolder))
+                Directory.Delete(bundlePathFolder, true);
+
+            ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
+            WriteLine(bundlePathFolder);
+            WriteLine("Downloaded....Finish");
+
+            return AppBundleInfo.FindAppBundle(bundlePathFolder);
+        }
+
+        public static void WriteLine(object message)
+        {
+            if (Verbosity)
+            {
+                Console.WriteLine(message);
             }
         }
 

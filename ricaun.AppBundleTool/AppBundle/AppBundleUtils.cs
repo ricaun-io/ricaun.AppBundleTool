@@ -15,7 +15,7 @@ namespace ricaun.AppBundleTool.AppBundle
             return Path.Combine(Environment.GetFolderPath(specialFolder), "Autodesk", "ApplicationPlugins");
         }
 
-        public static AppBundleInfo FindAppBundle(string appBundleName)
+        public static AppBundleInfo FindAppBundleByName(string appBundleName)
         {
             var bundles = GetAppBundleFolders();
             return bundles.Select(e => new AppBundleInfo(e)).FirstOrDefault(e => e.ApplicationPackage?.Name == appBundleName);

@@ -9,9 +9,9 @@ namespace ricaun.AppBundleTool.AppBundle
         {
             if (appBundleInfo is null) return;
             Console.WriteLine($"Name: \t{appBundleInfo.Name}");
-            Console.WriteLine($"PathBundle: \t{appBundleInfo.PathBundle}");
-            Console.WriteLine($"PathPackageContents: \t{appBundleInfo.PathPackageContents}");
-            Console.WriteLine($"ApplicationPackage: \t{appBundleInfo.ApplicationPackage.AsString()}");
+            Console.WriteLine($"Path: \t{appBundleInfo.PathBundle}");
+            //Console.WriteLine($"PathPackageContents: \t{appBundleInfo.PathPackageContents}");
+            Console.WriteLine($"App: \t{appBundleInfo.ApplicationPackage.AsString()}");
 
             if (showComponents == false) return;
             if (appBundleInfo.ApplicationPackage is not null)
