@@ -88,12 +88,19 @@ namespace ricaun.AppBundleTool
                         Console.WriteLine(applicationPluginsFolder);
                         // Copy all files of the folder to a different folder.
 
-                        if (!appBundleInfo.IsValid())
+                        if (appBundleInfo is not null)
                         {
-                            appBundleInfo.PathBundle = Path.Combine(applicationPluginsFolder, appBundleName);
+                            if (!appBundleInfo.IsValid())
+                            {
+                                appBundleInfo.PathBundle = Path.Combine(applicationPluginsFolder, appBundleName);
+                            }
+                            DirectoryUtils.CopyFilesRecursively(appBundleInfoTemp.PathBundle, appBundleInfo.PathBundle);
                         }
-
-                        DirectoryUtils.CopyFilesRecursively(appBundleInfoTemp.PathBundle, appBundleInfo.PathBundle);
+                        else
+                        {
+                            var appBundleFolder = Path.Combine(applicationPluginsFolder, appBundleInfoTemp.Name);
+                            DirectoryUtils.CopyFilesRecursively(appBundleInfoTemp.PathBundle, appBundleFolder);
+                        }
 
                         //Console.WriteLine(bundlePathZip);
 
@@ -112,12 +119,48 @@ namespace ricaun.AppBundleTool
                     }
 
 
-                    
+
                 }
                 else if (options.Uninstall)
                 {
                     if (Path.GetExtension(appBundleName) == ".zip")
-                        appBundleName = Path.GetFileNameWithoutExtension(options.App);
+                    {
+                        var bundleUrl = options.App;
+                        Console.WriteLine($"DownloadBundle: {bundleUrl}");
+
+                        Console.WriteLine("Downloaded....");
+
+                        var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).GetAwaiter().GetResult();
+
+                        // unzip file to folder
+                        var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
+                        if (Directory.Exists(bundlePathFolder))
+                            Directory.Delete(bundlePathFolder, true);
+
+                        ZipFile.ExtractToDirectory(bundlePathZip, bundlePathFolder, true);
+
+                        Console.WriteLine(bundlePathFolder);
+
+                        Console.WriteLine("Downloaded....Finish");
+                        var appBundleInfoTemp = AppBundleInfo.FindAppBundle(bundlePathFolder);
+                        appBundleInfoTemp?.Show();
+
+                        if (appBundleInfoTemp is null)
+                        {
+                            Console.WriteLine($"AppBundle '{bundleUrl}' not found.");
+                            return;
+                        }
+
+                        if (appBundleInfoTemp.IsValid())
+                        {
+                            appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"AppBundleInfo '{appBundleInfoTemp.Name}' not valid.");
+                            return;
+                        }
+                    }
 
                     var appBundle = AppBundle.AppBundleUtils.FindAppBundle(appBundleName);
 
@@ -129,8 +172,10 @@ namespace ricaun.AppBundleTool
 
                     appBundle.Show();
 
+                    Console.WriteLine(appBundle.Name);
+
                     var applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
-                    ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundleName);
+                    ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
                     Console.WriteLine($"Uninstall '{appBundleName}'");
                 }
                 else if (Path.GetExtension(appBundleName) == ".zip")
