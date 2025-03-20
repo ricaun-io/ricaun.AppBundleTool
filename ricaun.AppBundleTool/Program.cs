@@ -131,6 +131,7 @@ namespace ricaun.AppBundleTool
                     var appBundleInfoTemp = DownloadAppBundleInfo(bundleUrl);
                     if (appBundleInfoTemp.IsValid())
                     {
+                        Console.WriteLine($"DownloadApp: {appBundleInfoTemp.ApplicationPackage.AsString()}");
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
                         var appBundleInfo = AppBundleUtils.FindAppBundleByName(appBundleName);
                         appBundleInfo?.Show();
