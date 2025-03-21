@@ -88,6 +88,12 @@ namespace ricaun.AppBundleTool.Utils
                 }
             }
 
+            if (File.Exists(uri.LocalPath))
+            {
+                File.Copy(uri.LocalPath, bundlePath, true);
+                return bundlePath;
+            }
+
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
 
