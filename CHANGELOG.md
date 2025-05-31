@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.1] / 2025-05-31
 ### Features
 - Support `Autodesk` native bundle with admin privileges.
+- Show list of bundles in table format using `DataTable`.
 ### Fixes
 - Fix `PackageContents.xml` requires admin privileges to read. (Fix: #1)
 

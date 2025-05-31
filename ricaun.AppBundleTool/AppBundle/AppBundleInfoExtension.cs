@@ -1,5 +1,6 @@
 ﻿using ricaun.AppBundleTool.PackageContents;
 using System;
+using System.Data;
 
 namespace ricaun.AppBundleTool.AppBundle
 {
@@ -24,6 +25,36 @@ namespace ricaun.AppBundleTool.AppBundle
                     }
                 }
             }
+        }
+
+        public static DataTable ToDataTable(this AppBundleInfo[] appBundleInfoArray, bool detail = false)
+        {
+            var table = new DataTable("AppBundles");
+            table.Columns.Add("Folder", typeof(string));
+            table.Columns.Add("Bundle", typeof(string));
+            table.Columns.Add("AppName", typeof(string));
+            if (detail)
+            {
+                table.Columns.Add("AppProduct", typeof(string));
+                table.Columns.Add("AppDescription", typeof(string));
+            }
+            table.Columns.Add("Access", typeof(string));
+            foreach (var appBundleInfo in appBundleInfoArray)
+            {
+                if (appBundleInfo == null) continue;
+                var row = table.NewRow();
+                row["Folder"] = appBundleInfo.AppBundleFolder;
+                row["Bundle"] = appBundleInfo.Name;
+                row["AppName"] = appBundleInfo.ApplicationPackage?.Name ?? string.Empty;
+                if (detail)
+                {
+                    row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty;
+                    row["AppDescription"] = appBundleInfo.ApplicationPackage?.Description ?? string.Empty;
+                }
+                row["Access"] = appBundleInfo.AppBundleAccess;
+                table.Rows.Add(row);
+            }
+            return table;
         }
     }
 }

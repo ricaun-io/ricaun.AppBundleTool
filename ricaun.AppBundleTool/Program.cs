@@ -5,6 +5,7 @@ using ricaun.AppBundleTool.Utils;
 using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.IO.Compression;
 
@@ -196,11 +197,7 @@ namespace ricaun.AppBundleTool
         public static void Show()
         {
             var appBundles = AppBundleUtils.GetAppBundles();
-
-            foreach (var appBundle in appBundles)
-            {
-                Console.WriteLine(appBundle);
-            }
+            appBundles.ToDataTable(Verbosity).Print();
         }
 
         private static string DisplayHelp<T>(ParserResult<T> result)
