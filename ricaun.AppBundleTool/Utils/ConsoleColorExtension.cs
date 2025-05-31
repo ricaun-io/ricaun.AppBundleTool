@@ -46,8 +46,49 @@ namespace ricaun.AppBundleTool.Utils
         /// <returns>A string wrapped in yellow color escape codes, or the original string if output is redirected.</returns>
         public static string ToConsoleYellow(this object value)
         {
-            return $"{GREEN}{value}{NORMAL}";
+            return $"{YELLOW}{value}{NORMAL}";
         }
+
+        /// <summary>
+        /// Formats the specified value as a string with blue console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in blue color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleBlue(this object value)
+        {
+            return $"{BLUE}{value}{NORMAL}";
+        }
+
+        /// <summary>
+        /// Formats the specified value as a string with magenta console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in magenta color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleMagenta(this object value)
+        {
+            return $"{MAGENTA}{value}{NORMAL}";
+        }
+
+        /// <summary>
+        /// Formats the specified value as a string with cyan console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in cyan color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleCyan(this object value)
+        {
+            return $"{CYAN}{value}{NORMAL}";
+        }
+
+        /// <summary>
+        /// Formats the specified value as a string with grey console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in grey color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleGrey(this object value)
+        {
+            return $"{GREY}{value}{NORMAL}";
+        }
+        
 
         static string NORMAL => Console.IsOutputRedirected ? "" : "\x1b[39m";
         static string RED => Console.IsOutputRedirected ? "" : "\x1b[91m";

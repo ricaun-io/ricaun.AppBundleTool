@@ -52,7 +52,7 @@ namespace ricaun.AppBundleTool.AppBundle
                 {
                     row["AppDescription"] = appBundleInfo.ApplicationPackage?.Description ?? string.Empty;
                 }
-                row["Access"] = appBundleInfo.AppBundleAccess == AppBundleAccess.Admin ? appBundleInfo.AppBundleAccess.ToConsoleRed() : appBundleInfo.AppBundleAccess;
+                row["Access"] = appBundleInfo.AppBundleAccess.ToConsoleString();
 
                 table.Rows.Add(row);
             }
@@ -76,7 +76,7 @@ namespace ricaun.AppBundleTool.AppBundle
             table.DataRow("AppProductCode", appBundleInfo.ApplicationPackage?.ProductCode ?? string.Empty);
             table.DataRow("AppCompanyName", appBundleInfo.ApplicationPackage?.CompanyDetails?.Name);
             table.DataRow("PathBundle", appBundleInfo.PathBundle);
-            table.DataRow("Access", appBundleInfo.AppBundleAccess == AppBundleAccess.Admin ? appBundleInfo.AppBundleAccess.ToConsoleRed() : appBundleInfo.AppBundleAccess);
+            table.DataRow("Access", appBundleInfo.AppBundleAccess.ToConsoleString());
 
             if (detail)
             {
@@ -96,6 +96,15 @@ namespace ricaun.AppBundleTool.AppBundle
             }
 
             return table;
+        }
+
+        private static string ToConsoleString(this AppBundleAccess appBundleAccess)
+        {
+            return appBundleAccess switch
+            {
+                AppBundleAccess.Admin => appBundleAccess.ToConsoleRed(),
+                _ => appBundleAccess.ToString()
+            };
         }
 
         private static DataTable CreateDataColumns(this DataTable table)
