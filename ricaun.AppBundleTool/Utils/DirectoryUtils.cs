@@ -37,12 +37,7 @@ namespace ricaun.AppBundleTool.Utils
 
         internal static void DeleteDirectoryToRecycleBin(string path)
         {
-            if (Directory.Exists(path))
-            {
-                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, 
-                    Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, 
-                    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-            }
+            RecycleBinUtils.DirectoryToRecycleBin(path);
         }
     }
 }

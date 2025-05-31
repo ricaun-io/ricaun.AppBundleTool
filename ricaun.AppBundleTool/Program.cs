@@ -125,7 +125,8 @@ namespace ricaun.AppBundleTool
                     var applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
                     Console.WriteLine($"Uninstall: {appBundle.ApplicationPackage.AsString()}");
                     //ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
-                    DirectoryUtils.DeleteDirectoryToRecycleBin(appBundle.PathBundle);
+
+                    UninstallAppBundle(appBundle);
                 }
                 else if (Path.GetExtension(appBundleName) == ".zip")
                 {
@@ -166,6 +167,31 @@ namespace ricaun.AppBundleTool
             else
             {
                 Console.WriteLine(displayHelp);
+            }
+        }
+
+        private static void UninstallAppBundle(AppBundleInfo appBundle)
+        {
+            try
+            {
+                RecycleBinUtils.DirectoryToRecycleBin(appBundle.PathBundle);
+                Console.WriteLine($"Send to Recycle Bin: {appBundle.PathBundle}".ToConsoleYellow());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Fail to send to Recycle Bin: {appBundle.PathBundle}".ToConsoleRed());
+            }
+
+            try
+            {
+                if (RecycleBinUtils.FileToRecycleBin(appBundle.PathPackageContents))
+                {
+                    Console.WriteLine($"Send to Recycle Bin: {appBundle.PathPackageContents}".ToConsoleYellow());
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Fail to send to Recycle Bin: {appBundle.PathPackageContents}".ToConsoleRed());
             }
         }
 

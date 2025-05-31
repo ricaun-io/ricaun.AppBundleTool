@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support `ProgramFilesX86` folder for `AutoCAD` bundles.
 ### Updates
 - Add `AppBundleAccess` to show bundle access information (`Allow` or `Admin`)
-- Update uninstall to use `DeleteDirectoryToRecycleBin`.
+- Update uninstall to use `UninstallAppBundle` with `RecycleBinUtils`.
+- Add `RecycleBinUtils` with methods to recycle files and folders.
 ### Fixes
 - Fix `PackageContents.xml` requires admin privileges to read. (Fix: #1)
 
