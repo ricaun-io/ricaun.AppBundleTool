@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support to find app by `BundleName` or `AppName`.
 - Show `AppBundle` information in table format.
 - Support Console color output in table format in `Admin` as red color.
+- Support `ProgramFilesX86` folder for `AutoCAD` bundles.
 ### Updates
 - Add `AppBundleAccess` to show bundle access information (`Allow` or `Admin`)
 - Update uninstall to use `DeleteDirectoryToRecycleBin`.

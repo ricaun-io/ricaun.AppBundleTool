@@ -13,7 +13,7 @@ namespace ricaun.AppBundleTool.AppBundle
 
             foreach (var specialFolder in specialFolders)
             {
-                var environmentFolder = Environment.GetFolderPath(specialFolder.Value);
+                var environmentFolder = specialFolder.Value.GetApplicationPlugins();
                 if (folder.StartsWith(environmentFolder, StringComparison.InvariantCultureIgnoreCase))
                 {
                     appBundleFolder = specialFolder.Key;
@@ -30,7 +30,8 @@ namespace ricaun.AppBundleTool.AppBundle
             {
                 { AppBundleFolder.AppData, Environment.SpecialFolder.ApplicationData },
                 { AppBundleFolder.ProgramData, Environment.SpecialFolder.CommonApplicationData },
-                { AppBundleFolder.ProgramFiles, Environment.SpecialFolder.ProgramFiles }
+                { AppBundleFolder.ProgramFiles, Environment.SpecialFolder.ProgramFiles },
+                { AppBundleFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFilesX86 },
             };
         }
 

@@ -5,6 +5,7 @@
         None,
         AppData,
         ProgramData,
-        ProgramFiles
+        ProgramFiles,
+        ProgramFilesX86
     }
 }
