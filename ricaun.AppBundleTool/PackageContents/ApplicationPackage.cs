@@ -29,6 +29,12 @@ namespace ricaun.AppBundleTool.PackageContents
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the description of the application package.
+        /// </summary>
+        [XmlAttribute]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the version of the application.
         /// </summary>
         [XmlAttribute]
@@ -56,7 +62,7 @@ namespace ricaun.AppBundleTool.PackageContents
         /// Gets or sets the components of the application package.
         /// </summary>
         [XmlElement]
-        public Component[] Components { get; set; }
+        public Component[] Components { get; set; } = new Component[0];
 
         /// <summary>
         /// Parses the application package from the specified XML file.
@@ -68,10 +74,22 @@ namespace ricaun.AppBundleTool.PackageContents
             if (string.IsNullOrWhiteSpace(pathPackageContents)) return null;
             if (!File.Exists(pathPackageContents)) return null;
 
-            XmlSerializer serializer = new XmlSerializer(typeof(ApplicationPackage));
-            using (FileStream fileStream = new FileStream(pathPackageContents, FileMode.Open))
+            try
             {
-                return (ApplicationPackage)serializer.Deserialize(fileStream);
+                XmlSerializer serializer = new XmlSerializer(typeof(ApplicationPackage));
+                using (Stream fileStream = File.OpenRead(pathPackageContents))
+                {
+                    return (ApplicationPackage)serializer.Deserialize(fileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                var name = Path.GetFileNameWithoutExtension(Path.GetDirectoryName(pathPackageContents));
+                return new ApplicationPackage()
+                {
+                    Name = name,
+                    Description = $"Error parsing ApplicationPackage: {ex.Message}",
+                };
             }
         }
     }

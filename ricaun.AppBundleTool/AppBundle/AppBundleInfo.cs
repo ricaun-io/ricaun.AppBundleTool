@@ -21,7 +21,7 @@ namespace ricaun.AppBundleTool.AppBundle
             {
                 AppBundleFolder = appBundleFolder;
             }
-            WriteAccess = AccessUtils.CheckWriteAccess(pathBundle);
+            WriteAccess = AccessUtils.CheckReadAndWriteAccess(PathPackageContents);
             ApplicationPackage = ApplicationPackage.Parse(PathPackageContents);
             ApplicationPackage.Show();
         }
