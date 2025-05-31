@@ -34,5 +34,15 @@ namespace ricaun.AppBundleTool.Utils
                 File.Copy(file, destFile, overwrite);
             }
         }
+
+        internal static void DeleteDirectoryToRecycleBin(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, 
+                    Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, 
+                    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support Console color output in table format in `Admin` as red color.
 ### Updates
 - Add `AppBundleAccess` to show bundle access information (`Allow` or `Admin`)
+- Update uninstall to use `DeleteDirectoryToRecycleBin`.
 ### Fixes
 - Fix `PackageContents.xml` requires admin privileges to read. (Fix: #1)
 

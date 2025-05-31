@@ -124,7 +124,8 @@ namespace ricaun.AppBundleTool
                     }
                     var applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
                     Console.WriteLine($"Uninstall: {appBundle.ApplicationPackage.AsString()}");
-                    ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
+                    //ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
+                    DirectoryUtils.DeleteDirectoryToRecycleBin(appBundle.PathBundle);
                 }
                 else if (Path.GetExtension(appBundleName) == ".zip")
                 {
