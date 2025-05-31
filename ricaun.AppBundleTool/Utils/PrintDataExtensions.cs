@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace System.Data
+namespace ricaun.AppBundleTool.Utils
 {
     /// <summary>
+    /// PrintDataExtensions with basic Console color support
+    /// </summary>
+    /// <remarks>
+    /// Based:
     /// https://github.com/yuvalsol/PrintDataTableToConsole
     /// https://github.com/yuvalsol/PrintDataTableToConsole/blob/master/PrintData/PrintDataExtensions.cs
-    /// </summary>
+    /// </remarks>
     internal static partial class PrintDataExtensions
     {
         #region Print Columns
@@ -30,6 +35,11 @@ namespace System.Data
                 PrintColumns(dataTable, columnNames);
         }
 
+        private static int GetLength(this string value)
+        {
+            return value.ToConsoleLength();
+        }
+
         private static void PrintColumns(string name, DataColumn[] columns)
         {
             string columnName = "Column Name";
@@ -38,26 +48,26 @@ namespace System.Data
             string dataMember = "Data Member";
 
             int length0 = 0;
-            int length1 = columnName.Length;
-            int length2 = dataType.Length;
-            int length3 = nullable.Length;
-            int length4 = dataMember.Length;
+            int length1 = columnName.GetLength();
+            int length2 = dataType.GetLength();
+            int length3 = nullable.GetLength();
+            int length4 = dataMember.GetLength();
 
             if (columns.Length > 0)
             {
-                int maxLength = columns.Select(c => c.Ordinal).Max().ToString().Length;
+                int maxLength = columns.Select(c => c.Ordinal).Max().ToString().GetLength();
                 if (length0 < maxLength)
                     length0 = maxLength;
 
-                maxLength = columns.Select(c => c.ColumnName.Length).Max();
+                maxLength = columns.Select(c => c.ColumnName.GetLength()).Max();
                 if (length1 < maxLength)
                     length1 = maxLength;
 
-                maxLength = columns.Select(c => c.DataType.ToString().Length).Max();
+                maxLength = columns.Select(c => c.DataType.ToString().GetLength()).Max();
                 if (length2 < maxLength)
                     length2 = maxLength;
 
-                maxLength = columns.Select(c => GetDataMemberType(c).Length + 1 + c.ColumnName.Length).Max();
+                maxLength = columns.Select(c => GetDataMemberType(c).GetLength() + 1 + c.ColumnName.GetLength()).Max();
                 if (length4 < maxLength)
                     length4 = maxLength;
             }
@@ -81,7 +91,7 @@ namespace System.Data
             foreach (DataColumn column in columns)
             {
                 string dataMemberType = GetDataMemberType(column);
-                string format2 = string.Format("{{5}} {{0,{0}}} {{5}} {{1,-{1}}} {{5}} {{2,-{2}}} {{5}} {{3,-{3}}} {{5}} {{4}} {{1}} {{5,{4}}}", length0, length1, length2, length3, length4 - dataMemberType.Length - column.ColumnName.Length);
+                string format2 = string.Format("{{5}} {{0,{0}}} {{5}} {{1,-{1}}} {{5}} {{2,-{2}}} {{5}} {{3,-{3}}} {{5}} {{4}} {{1}} {{5,{4}}}", length0, length1, length2, length3, length4 - dataMemberType.GetLength() - column.ColumnName.GetLength());
                 WriteLine(format2, column.Ordinal, column.ColumnName, column.DataType, column.AllowDBNull, dataMemberType, Verticl_Bar);
             }
 
@@ -342,7 +352,7 @@ namespace System.Data
             if (top > 0)
                 dataRows = dataRows.Take(top);
 
-            int[] lengths = columns.Select(c => c.ColumnName.Length).ToArray();
+            int[] lengths = columns.Select(c => c.ColumnName.GetLength()).ToArray();
             foreach (DataRow row in dataRows)
                 CalculateLengths(row, columns, lengths, toString);
 
@@ -358,7 +368,7 @@ namespace System.Data
                         maxRowOrdinal = dataRows.Select(row => (int)row[ordinalColumnName]).Max();
 
                     if (maxRowOrdinal > -1)
-                        rowOrdinalsLength = maxRowOrdinal.ToString().Length;
+                        rowOrdinalsLength = maxRowOrdinal.ToString().GetLength();
                 }
             }
 
@@ -441,6 +451,12 @@ namespace System.Data
                     else
                     {
                         str = string.Format("{0}", (obj == DBNull.Value || obj == null ? "null" : obj));
+                        if (str.Length != str.GetLength())
+                        {
+                            var extraSpaces = lengths[i] - str.GetLength();
+                            if (extraSpaces > 0)
+                                str += new string(' ', extraSpaces); // Ensure the string is padded to the correct length
+                        }
                     }
 
                     objects[i + 1] = str;
@@ -513,8 +529,8 @@ namespace System.Data
                     str = string.Format("{0}", (obj == DBNull.Value || obj == null ? "null" : obj));
                 }
 
-                if (lengths[i] < str.Length)
-                    lengths[i] = str.Length;
+                if (lengths[i] < str.GetLength())
+                    lengths[i] = str.GetLength();
             }
         }
 
@@ -752,7 +768,7 @@ namespace System.Data
             if (top > 0)
                 dataRows = dataRows.Take(top);
 
-            int columnsLength = columns.Select(c => c.ColumnName.Length).Max();
+            int columnsLength = columns.Select(c => c.ColumnName.GetLength()).Max();
 
             int[] lengths = new int[columns.Length];
             foreach (DataRow row in dataRows)
@@ -774,7 +790,7 @@ namespace System.Data
 
                     if (maxRowOrdinal > -1)
                     {
-                        int rowOrdinalsLength = maxRowOrdinal.ToString().Length;
+                        int rowOrdinalsLength = maxRowOrdinal.ToString().GetLength();
                         if (rowsLength < rowOrdinalsLength)
                             rowsLength = rowOrdinalsLength;
                     }

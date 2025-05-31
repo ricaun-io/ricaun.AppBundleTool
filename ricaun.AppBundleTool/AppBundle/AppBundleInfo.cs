@@ -25,7 +25,7 @@ namespace ricaun.AppBundleTool.AppBundle
             WriteAccess = AccessUtils.CheckReadAndWriteAccess(PathPackageContents);
             AppBundleAccess = WriteAccess ? AppBundleAccess.Allow : AppBundleAccess.Admin;
             ApplicationPackage = ApplicationPackage.Parse(PathPackageContents);
-            ApplicationPackage.Show();
+            //ApplicationPackage.Show();
         }
         public bool IsValid()
         {

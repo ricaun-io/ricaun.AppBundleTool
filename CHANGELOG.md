@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Show list of bundles in table format using `DataTable`.
 - Support to find app by `BundleName` or `AppName`.
 - Show `AppBundle` information in table format.
+- Support Console color output in table format in `Admin` as red color.
 ### Updates
 - Add `AppBundleAccess` to show bundle access information (`Allow` or `Admin`)
 ### Fixes

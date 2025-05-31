@@ -7,15 +7,15 @@ namespace ricaun.AppBundleTool.Utils
     /// </summary>
     public static class ConsoleColorExtension
     {
-        internal static int ToConsoleLength(this string text)
+        internal static int ToConsoleLength(this string value)
         {
-            if (string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(value))
                 return 0;
 
             // Regex to match ANSI escape codes: starts with \x1b[, ends with m
-            var regex = new System.Text.RegularExpressions.Regex(@"\x1b\[[^m]*m");
+            var regex = new System.Text.RegularExpressions.Regex(@"\x1b\[\d+m");
             // Remove all ANSI escape codes
-            string cleanText = regex.Replace(text, string.Empty);
+            string cleanText = regex.Replace(value, string.Empty);
             return cleanText.Length;
         }
 

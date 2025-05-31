@@ -1,4 +1,5 @@
 ﻿using ricaun.AppBundleTool.PackageContents;
+using ricaun.AppBundleTool.Utils;
 using System;
 using System.Data;
 
@@ -29,7 +30,7 @@ namespace ricaun.AppBundleTool.AppBundle
 
         public static DataTable ToDataTable(this AppBundleInfo[] appBundleInfoArray, bool detail = false)
         {
-            var table = new DataTable("AppBundles");
+            var table = new DataTable();
             table.Columns.Add("Folder", typeof(string));
             table.Columns.Add("Bundle", typeof(string));
             table.Columns.Add("AppName", typeof(string));
@@ -51,15 +52,8 @@ namespace ricaun.AppBundleTool.AppBundle
                 {
                     row["AppDescription"] = appBundleInfo.ApplicationPackage?.Description ?? string.Empty;
                 }
-                row["Access"] = appBundleInfo.AppBundleAccess;
-                //if (appBundleInfo.AppBundleAccess == AppBundleAccess.Allow)
-                //{
-                //    //row["Access"] = $"{GREEN}{appBundleInfo.AppBundleAccess}{NORMAL}";
-                //}
-                //else if (appBundleInfo.AppBundleAccess == AppBundleAccess.Admin)
-                //{
-                //    row["Access"] = $"{RED}{appBundleInfo.AppBundleAccess}{NORMAL}";
-                //}
+                row["Access"] = appBundleInfo.AppBundleAccess == AppBundleAccess.Admin ? appBundleInfo.AppBundleAccess.ToConsoleRed() : appBundleInfo.AppBundleAccess;
+
                 table.Rows.Add(row);
             }
             return table;
@@ -69,7 +63,7 @@ namespace ricaun.AppBundleTool.AppBundle
         {
             if (appBundleInfo == null) return null;
 
-            var table = new DataTable("AppBundle");
+            var table = new DataTable();
             table.CreateDataColumns();
 
             table.DataRow("Bundle", appBundleInfo.Name);
@@ -82,7 +76,7 @@ namespace ricaun.AppBundleTool.AppBundle
             table.DataRow("AppProductCode", appBundleInfo.ApplicationPackage?.ProductCode ?? string.Empty);
             table.DataRow("AppCompanyName", appBundleInfo.ApplicationPackage?.CompanyDetails?.Name);
             table.DataRow("PathBundle", appBundleInfo.PathBundle);
-            table.DataRow("Access", appBundleInfo.AppBundleAccess);
+            table.DataRow("Access", appBundleInfo.AppBundleAccess == AppBundleAccess.Admin ? appBundleInfo.AppBundleAccess.ToConsoleRed() : appBundleInfo.AppBundleAccess);
 
             if (detail)
             {
