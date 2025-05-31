@@ -59,7 +59,7 @@ namespace ricaun.AppBundleTool
 
                         Console.WriteLine($"Install: {appBundleInfoTemp.ApplicationPackage.AsString()}");
 
-                        var appBundleInstalled = AppBundleUtils.FindAppBundleByName(appBundleName);
+                        var appBundleInstalled = AppBundleUtils.FindAppBundleByAppName(appBundleName);
                         if (appBundleInstalled is not null)
                         {
                             applicationPluginsFolder = appBundleInstalled.AppBundleFolder.GetApplicationPlugins();
@@ -91,7 +91,7 @@ namespace ricaun.AppBundleTool
                         //});
                         Console.WriteLine("---");
                     }
-                    AppBundleUtils.FindAppBundleByName(appBundleName)?.Show();
+                    AppBundleUtils.FindAppBundleByAppName(appBundleName)?.Show();
                 }
                 else if (options.Uninstall)
                 {
@@ -116,7 +116,7 @@ namespace ricaun.AppBundleTool
                         }
                     }
 
-                    var appBundle = AppBundleUtils.FindAppBundleByName(appBundleName);
+                    var appBundle = AppBundleUtils.FindAppBundleByAppName(appBundleName);
                     if (appBundle is null)
                     {
                         Console.WriteLine($"AppBundle '{appBundleName}' not found.");
@@ -134,7 +134,7 @@ namespace ricaun.AppBundleTool
                     {
                         Console.WriteLine($"DownloadApp: {appBundleInfoTemp.ApplicationPackage.AsString()}");
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
-                        var appBundleInfo = AppBundleUtils.FindAppBundleByName(appBundleName);
+                        var appBundleInfo = AppBundleUtils.FindAppBundleByAppName(appBundleName);
                         appBundleInfo?.Show();
                         if (appBundleInfo is null)
                         {
@@ -150,7 +150,7 @@ namespace ricaun.AppBundleTool
                 }
                 else
                 {
-                    var appBundle = AppBundleUtils.FindAppBundleByName(appBundleName);
+                    var appBundle = AppBundleUtils.FindAppBundleByAppName(appBundleName) ?? AppBundleUtils.FindAppBundleByBundleName(appBundleName);
 
                     if (appBundle is null)
                     {
@@ -158,7 +158,8 @@ namespace ricaun.AppBundleTool
                         return;
                     }
 
-                    appBundle.Show();
+                    appBundle.ToDataTable(Verbosity).Print();
+                    //appBundle.Show();
                 }
             }
             else

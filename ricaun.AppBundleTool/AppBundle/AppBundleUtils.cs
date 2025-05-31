@@ -15,10 +15,24 @@ namespace ricaun.AppBundleTool.AppBundle
             return Path.Combine(Environment.GetFolderPath(specialFolder), "Autodesk", "ApplicationPlugins");
         }
 
-        public static AppBundleInfo FindAppBundleByName(string appBundleName)
+        public static AppBundleInfo FindAppBundleByAppName(string appBundleName)
         {
+            if (string.IsNullOrWhiteSpace(appBundleName))
+                return null;
+
             var bundles = GetAppBundleFolders();
-            return bundles.Select(e => new AppBundleInfo(e)).FirstOrDefault(e => e.ApplicationPackage?.Name == appBundleName);
+            return bundles.Select(e => new AppBundleInfo(e))
+                .FirstOrDefault(e => appBundleName.Equals(e.ApplicationPackage?.Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public static AppBundleInfo FindAppBundleByBundleName(string bundleName)
+        {
+            if (string.IsNullOrWhiteSpace(bundleName))
+                return null;
+
+            var bundles = GetAppBundleFolders();
+            return bundles.Select(e => new AppBundleInfo(e))
+                .FirstOrDefault(e => e.Name.Equals(bundleName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>

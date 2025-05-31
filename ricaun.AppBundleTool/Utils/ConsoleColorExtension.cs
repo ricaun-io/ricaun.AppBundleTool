@@ -1,0 +1,67 @@
+﻿using System;
+
+namespace ricaun.AppBundleTool.Utils
+{
+    /// <summary>
+    /// Provides extension methods for formatting strings with console color escape codes.
+    /// </summary>
+    public static class ConsoleColorExtension
+    {
+        internal static int ToConsoleLength(this string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return 0;
+
+            // Regex to match ANSI escape codes: starts with \x1b[, ends with m
+            var regex = new System.Text.RegularExpressions.Regex(@"\x1b\[[^m]*m");
+            // Remove all ANSI escape codes
+            string cleanText = regex.Replace(text, string.Empty);
+            return cleanText.Length;
+        }
+
+        /// <summary>
+        /// Formats the specified value as a string with red console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in red color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleRed(this object value)
+        {
+            return $"{RED}{value}{NORMAL}";
+        }
+
+        /// <summary>
+        /// Formats the specified value as a string with green console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in green color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleGreen(this object value)
+        {
+            return $"{GREEN}{value}{NORMAL}";
+        }
+
+        /// <summary>
+        /// Formats the specified value as a string with yellow console color escape codes.
+        /// </summary>
+        /// <param name="value">The value to format.</param>
+        /// <returns>A string wrapped in yellow color escape codes, or the original string if output is redirected.</returns>
+        public static string ToConsoleYellow(this object value)
+        {
+            return $"{GREEN}{value}{NORMAL}";
+        }
+
+        static string NORMAL => Console.IsOutputRedirected ? "" : "\x1b[39m";
+        static string RED => Console.IsOutputRedirected ? "" : "\x1b[91m";
+        static string GREEN => Console.IsOutputRedirected ? "" : "\x1b[92m";
+        static string YELLOW => Console.IsOutputRedirected ? "" : "\x1b[93m";
+        static string BLUE => Console.IsOutputRedirected ? "" : "\x1b[94m";
+        static string MAGENTA => Console.IsOutputRedirected ? "" : "\x1b[95m";
+        static string CYAN => Console.IsOutputRedirected ? "" : "\x1b[96m";
+        static string GREY => Console.IsOutputRedirected ? "" : "\x1b[97m";
+        static string BOLD => Console.IsOutputRedirected ? "" : "\x1b[1m";
+        static string NOBOLD => Console.IsOutputRedirected ? "" : "\x1b[22m";
+        static string UNDERLINE => Console.IsOutputRedirected ? "" : "\x1b[4m";
+        static string NOUNDERLINE => Console.IsOutputRedirected ? "" : "\x1b[24m";
+        static string REVERSE => Console.IsOutputRedirected ? "" : "\x1b[7m";
+        static string NOREVERSE => Console.IsOutputRedirected ? "" : "\x1b[27m";
+    }
+}
