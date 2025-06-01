@@ -1,6 +1,7 @@
 ﻿using ricaun.AppBundleTool.PackageContents;
 using ricaun.AppBundleTool.Utils;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace ricaun.AppBundleTool.AppBundle
@@ -59,6 +60,24 @@ namespace ricaun.AppBundleTool.AppBundle
             return table;
         }
 
+        public static DataTable[] ToDataTables(this AppBundleInfo appBundleInfo, bool detail = false)
+        {
+            var tables = new List<DataTable>();
+
+            tables.Add(appBundleInfo.ToDataTable(detail));
+
+            if (detail)
+            {
+                foreach (var component in appBundleInfo.ApplicationPackage?.Components)
+                {
+                    if (component is null) continue;
+                    tables.Add(component.ToDataTable());
+                }
+            }
+
+            return tables.ToArray();
+        }
+
         public static DataTable ToDataTable(this AppBundleInfo appBundleInfo, bool detail = false)
         {
             if (appBundleInfo == null) return null;
@@ -75,24 +94,32 @@ namespace ricaun.AppBundleTool.AppBundle
             table.DataRow("AppProductType", appBundleInfo.ApplicationPackage?.ProductType ?? string.Empty);
             table.DataRow("AppProductCode", appBundleInfo.ApplicationPackage?.ProductCode ?? string.Empty);
             table.DataRow("AppCompanyName", appBundleInfo.ApplicationPackage?.CompanyDetails?.Name);
+            if (detail)
+            {
+                table.DataRow("AppNameSpace", appBundleInfo.ApplicationPackage?.AppNameSpace ?? string.Empty);
+                table.DataRow("AppUpgradeCode", appBundleInfo.ApplicationPackage?.UpgradeCode ?? string.Empty);
+            }
             table.DataRow("PathBundle", appBundleInfo.PathBundle);
             table.DataRow("Access", appBundleInfo.AppBundleAccess.ToConsoleString());
 
-            if (detail)
+            return table;
+        }
+
+        public static DataTable ToDataTable(this Component component)
+        {
+            DataTable table = new DataTable();
+            table.CreateDataColumns();
+
+            table.DataRow("Component.Description", component.Description);
+            table.DataRow("Requirements.Platform", component.RuntimeRequirements?.Platform);
+            table.DataRow("Requirements.OS", component.RuntimeRequirements?.OS);
+            table.DataRow("Requirements.SeriesMin", component.RuntimeRequirements?.SeriesMin);
+            table.DataRow("Requirements.SeriesMax", component.RuntimeRequirements?.SeriesMax);
+
+            foreach (var componentEntry in component.ComponentEntry)
             {
-                foreach (var component in appBundleInfo.ApplicationPackage?.Components)
-                {
-                    var componentText = component.RuntimeRequirements.Platform + " " +
-                                        component.RuntimeRequirements.OS + " " +
-                                        component.RuntimeRequirements.SeriesMin + " " +
-                                        component.RuntimeRequirements.SeriesMax;
-                    table.DataRow("Component", componentText);
-                    foreach (var componentEntry in component.ComponentEntry)
-                    {
-                        table.DataRow("ComponentEntry.AppName", componentEntry.AppName);
-                        table.DataRow("ComponentEntry.ModuleName", componentEntry.ModuleName);
-                    }
-                }
+                table.DataRow("ComponentEntry.AppName", componentEntry.AppName);
+                table.DataRow("ComponentEntry.ModuleName", componentEntry.ModuleName);
             }
 
             return table;

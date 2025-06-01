@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `AppBundleAccess` to show bundle access information (`Allow` or `Admin`)
 - Update uninstall to use `UninstallAppBundle` with `RecycleBinUtils`.
 - Add `RecycleBinUtils` with methods to recycle files and folders.
+- Add `AppNameSpace` and `AppUpgradeCode` in the `ApplicationPackage` class.
 ### Fixes
 - Fix `PackageContents.xml` requires admin privileges to read. (Fix: #1)
 

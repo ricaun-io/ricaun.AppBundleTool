@@ -160,7 +160,11 @@ namespace ricaun.AppBundleTool
                         return;
                     }
 
-                    appBundle.ToDataTable(Verbosity).Print();
+                    foreach (var table in appBundle.ToDataTables(Verbosity))
+                    {
+                        table.Print();
+                    }
+                    
                     //appBundle.Show();
                 }
             }

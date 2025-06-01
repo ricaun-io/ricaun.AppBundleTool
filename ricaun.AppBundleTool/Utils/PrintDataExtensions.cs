@@ -8,7 +8,7 @@ using System.Text;
 namespace ricaun.AppBundleTool.Utils
 {
     /// <summary>
-    /// PrintDataExtensions with basic Console color support
+    /// PrintDataExtensions with basic Console color support (PrintList does not work with Console color)
     /// </summary>
     /// <remarks>
     /// Based:
@@ -527,6 +527,12 @@ namespace ricaun.AppBundleTool.Utils
                 else
                 {
                     str = string.Format("{0}", (obj == DBNull.Value || obj == null ? "null" : obj));
+                    if (str.Length != str.GetLength())
+                    {
+                        var extraSpaces = lengths[i] - str.GetLength();
+                        if (extraSpaces > 0)
+                            str += new string(' ', extraSpaces); // Ensure the string is padded to the correct length
+                    }
                 }
 
                 if (lengths[i] < str.GetLength())
