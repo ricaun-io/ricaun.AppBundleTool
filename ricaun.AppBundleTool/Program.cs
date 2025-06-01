@@ -164,13 +164,16 @@ namespace ricaun.AppBundleTool
                     {
                         table.Print();
                     }
-                    
+
+                    //appBundle.ToDataTable(Verbosity).Print();
+
                     //appBundle.Show();
                 }
             }
             else
             {
-                Console.WriteLine(displayHelp);
+                //Console.WriteLine(displayHelp);
+                Show();
             }
         }
 

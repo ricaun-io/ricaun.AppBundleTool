@@ -38,6 +38,7 @@ namespace ricaun.AppBundleTool.AppBundle
             table.Columns.Add("AppProduct", typeof(string));
             if (detail)
             {
+                table.Columns.Add("Company", typeof(string));
                 table.Columns.Add("AppDescription", typeof(string));
             }
             table.Columns.Add("Access", typeof(string));
@@ -51,6 +52,7 @@ namespace ricaun.AppBundleTool.AppBundle
                 row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty;
                 if (detail)
                 {
+                    row["Company"] = appBundleInfo.ApplicationPackage?.CompanyDetails?.Name ?? string.Empty;
                     row["AppDescription"] = appBundleInfo.ApplicationPackage?.Description ?? string.Empty;
                 }
                 row["Access"] = appBundleInfo.AppBundleAccess.ToConsoleString();
@@ -101,6 +103,27 @@ namespace ricaun.AppBundleTool.AppBundle
             }
             table.DataRow("PathBundle", appBundleInfo.PathBundle);
             table.DataRow("Access", appBundleInfo.AppBundleAccess.ToConsoleString());
+
+            //if (detail)
+            //{
+            //    table.DataRow("Components", string.Empty);
+            //    foreach (var component in appBundleInfo.ApplicationPackage?.Components)
+            //    {
+            //        if (component is null) continue;
+
+            //        table.DataRow("Component.Description", component.Description);
+            //        table.DataRow("Requirements.Platform", component.RuntimeRequirements?.Platform);
+            //        table.DataRow("Requirements.OS", component.RuntimeRequirements?.OS);
+            //        table.DataRow("Requirements.SeriesMin", component.RuntimeRequirements?.SeriesMin);
+            //        table.DataRow("Requirements.SeriesMax", component.RuntimeRequirements?.SeriesMax);
+
+            //        foreach (var componentEntry in component.ComponentEntry)
+            //        {
+            //            table.DataRow("ComponentEntry.AppName", componentEntry.AppName);
+            //            table.DataRow("ComponentEntry.ModuleName", componentEntry.ModuleName);
+            //        }
+            //    }
+            //}
 
             return table;
         }
