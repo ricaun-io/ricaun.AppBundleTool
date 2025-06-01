@@ -38,6 +38,7 @@ namespace ricaun.AppBundleTool.AppBundle
             table.Columns.Add("AppProduct", typeof(string));
             if (detail)
             {
+                table.Columns.Add("AppVersion", typeof(string));
                 table.Columns.Add("Company", typeof(string));
                 table.Columns.Add("AppDescription", typeof(string));
             }
@@ -52,6 +53,7 @@ namespace ricaun.AppBundleTool.AppBundle
                 row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty;
                 if (detail)
                 {
+                    row["AppVersion"] = appBundleInfo.ApplicationPackage?.AppVersion ?? string.Empty;
                     row["Company"] = appBundleInfo.ApplicationPackage?.CompanyDetails?.Name ?? string.Empty;
                     row["AppDescription"] = appBundleInfo.ApplicationPackage?.Description ?? string.Empty;
                 }

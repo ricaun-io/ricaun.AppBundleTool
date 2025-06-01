@@ -156,7 +156,8 @@ namespace ricaun.AppBundleTool
 
                     if (appBundle is null)
                     {
-                        Console.WriteLine($"AppBundle '{appBundleName}' not found.");
+                        Show();
+                        Console.WriteLine($"AppBundle '{appBundleName}' not found.".ToConsoleYellow());
                         return;
                     }
 
@@ -172,8 +173,8 @@ namespace ricaun.AppBundleTool
             }
             else
             {
-                //Console.WriteLine(displayHelp);
-                Show();
+                Console.WriteLine(displayHelp);
+                //Show();
             }
         }
 
