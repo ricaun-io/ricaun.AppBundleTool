@@ -24,6 +24,6 @@ namespace ricaun.AppBundleTool.PackageContents
         /// Gets or sets the entries of the component.
         /// </summary>
         [XmlElement]
-        public ComponentEntry[] ComponentEntry { get; set; }
+        public ComponentEntry[] ComponentEntry { get; set; } = new ComponentEntry[0];
     }
 }

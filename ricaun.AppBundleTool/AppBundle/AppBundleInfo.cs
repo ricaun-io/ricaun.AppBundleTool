@@ -10,6 +10,7 @@ namespace ricaun.AppBundleTool.AppBundle
         public string PathBundle { get; set; }
         public string PathPackageContents { get; set; }
         public AppBundleFolder AppBundleFolder { get; set; }
+        public AppBundleAccess AppBundleAccess { get; set; }
         public bool WriteAccess { get; set; }
         public ApplicationPackage ApplicationPackage { get; set; }
         public AppBundleInfo(string pathBundle)
@@ -21,9 +22,10 @@ namespace ricaun.AppBundleTool.AppBundle
             {
                 AppBundleFolder = appBundleFolder;
             }
-            WriteAccess = AccessUtils.CheckWriteAccess(pathBundle);
+            WriteAccess = AccessUtils.CheckReadAndWriteAccess(PathPackageContents);
+            AppBundleAccess = WriteAccess ? AppBundleAccess.Allow : AppBundleAccess.Admin;
             ApplicationPackage = ApplicationPackage.Parse(PathPackageContents);
-            ApplicationPackage.Show();
+            //ApplicationPackage.Show();
         }
         public bool IsValid()
         {

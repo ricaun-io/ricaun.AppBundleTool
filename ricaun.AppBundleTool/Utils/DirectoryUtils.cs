@@ -34,5 +34,10 @@ namespace ricaun.AppBundleTool.Utils
                 File.Copy(file, destFile, overwrite);
             }
         }
+
+        internal static void DeleteDirectoryToRecycleBin(string path)
+        {
+            RecycleBinUtils.DirectoryToRecycleBin(path);
+        }
     }
 }

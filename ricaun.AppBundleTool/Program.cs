@@ -5,6 +5,7 @@ using ricaun.AppBundleTool.Utils;
 using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.IO.Compression;
 
@@ -58,7 +59,7 @@ namespace ricaun.AppBundleTool
 
                         Console.WriteLine($"Install: {appBundleInfoTemp.ApplicationPackage.AsString()}");
 
-                        var appBundleInstalled = AppBundleUtils.FindAppBundleByName(appBundleName);
+                        var appBundleInstalled = AppBundleUtils.FindAppBundleByAppName(appBundleName);
                         if (appBundleInstalled is not null)
                         {
                             applicationPluginsFolder = appBundleInstalled.AppBundleFolder.GetApplicationPlugins();
@@ -90,7 +91,7 @@ namespace ricaun.AppBundleTool
                         //});
                         Console.WriteLine("---");
                     }
-                    AppBundleUtils.FindAppBundleByName(appBundleName)?.Show();
+                    AppBundleUtils.FindAppBundleByAppName(appBundleName)?.Show();
                 }
                 else if (options.Uninstall)
                 {
@@ -115,7 +116,7 @@ namespace ricaun.AppBundleTool
                         }
                     }
 
-                    var appBundle = AppBundleUtils.FindAppBundleByName(appBundleName);
+                    var appBundle = AppBundleUtils.FindAppBundleByAppName(appBundleName);
                     if (appBundle is null)
                     {
                         Console.WriteLine($"AppBundle '{appBundleName}' not found.");
@@ -123,7 +124,9 @@ namespace ricaun.AppBundleTool
                     }
                     var applicationPluginsFolder = appBundle.AppBundleFolder.GetApplicationPlugins();
                     Console.WriteLine($"Uninstall: {appBundle.ApplicationPackage.AsString()}");
-                    ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
+                    //ApplicationPluginsUtils.DeleteBundle(applicationPluginsFolder, appBundle.Name);
+
+                    UninstallAppBundle(appBundle);
                 }
                 else if (Path.GetExtension(appBundleName) == ".zip")
                 {
@@ -133,7 +136,7 @@ namespace ricaun.AppBundleTool
                     {
                         Console.WriteLine($"DownloadApp: {appBundleInfoTemp.ApplicationPackage.AsString()}");
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
-                        var appBundleInfo = AppBundleUtils.FindAppBundleByName(appBundleName);
+                        var appBundleInfo = AppBundleUtils.FindAppBundleByAppName(appBundleName);
                         appBundleInfo?.Show();
                         if (appBundleInfo is null)
                         {
@@ -149,20 +152,54 @@ namespace ricaun.AppBundleTool
                 }
                 else
                 {
-                    var appBundle = AppBundleUtils.FindAppBundleByName(appBundleName);
+                    var appBundle = AppBundleUtils.FindAppBundleByAppName(appBundleName) ?? AppBundleUtils.FindAppBundleByBundleName(appBundleName);
 
                     if (appBundle is null)
                     {
-                        Console.WriteLine($"AppBundle '{appBundleName}' not found.");
+                        Show();
+                        Console.WriteLine($"AppBundle '{appBundleName}' not found.".ToConsoleYellow());
                         return;
                     }
 
-                    appBundle.Show();
+                    foreach (var table in appBundle.ToDataTables(Verbosity))
+                    {
+                        table.Print();
+                    }
+
+                    //appBundle.ToDataTable(Verbosity).Print();
+
+                    //appBundle.Show();
                 }
             }
             else
             {
                 Console.WriteLine(displayHelp);
+                //Show();
+            }
+        }
+
+        private static void UninstallAppBundle(AppBundleInfo appBundle)
+        {
+            try
+            {
+                RecycleBinUtils.DirectoryToRecycleBin(appBundle.PathBundle);
+                Console.WriteLine($"Send to Recycle Bin: {appBundle.PathBundle}".ToConsoleYellow());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Fail to send to Recycle Bin: {appBundle.PathBundle}".ToConsoleRed());
+            }
+
+            try
+            {
+                if (RecycleBinUtils.FileToRecycleBin(appBundle.PathPackageContents))
+                {
+                    Console.WriteLine($"Send to Recycle Bin: {appBundle.PathPackageContents}".ToConsoleYellow());
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Fail to send to Recycle Bin: {appBundle.PathPackageContents}".ToConsoleRed());
             }
         }
 
@@ -196,11 +233,7 @@ namespace ricaun.AppBundleTool
         public static void Show()
         {
             var appBundles = AppBundleUtils.GetAppBundles();
-
-            foreach (var appBundle in appBundles)
-            {
-                Console.WriteLine(appBundle);
-            }
+            appBundles.ToDataTable(Verbosity).Print();
         }
 
         private static string DisplayHelp<T>(ParserResult<T> result)
