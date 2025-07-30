@@ -82,6 +82,25 @@ namespace ricaun.AppBundleTool.AppBundle
             return tables.ToArray();
         }
 
+        public static DataTable ToDataTable(this AppBundleInfo appBundleInfoNew, AppBundleInfo appBundleInfoOld)
+        {
+            if (appBundleInfoNew == null) return null;
+            if (appBundleInfoOld == null) return null;
+
+            var table = new DataTable();
+
+            table.CreateDataColumns("Old", "New");
+
+            table.DataRow("AppName", appBundleInfoOld.ApplicationPackage?.Name, appBundleInfoNew.ApplicationPackage?.Name);
+            table.DataRow("AppVersion", appBundleInfoOld.ApplicationPackage?.AppVersion?.ToConsoleYellow(), appBundleInfoNew.ApplicationPackage?.AppVersion?.ToConsoleGreen());
+            table.DataRow("AppProduct", appBundleInfoOld.ApplicationPackage?.AutodeskProduct, appBundleInfoNew.ApplicationPackage?.AutodeskProduct);
+            table.DataRow("AppProductType", appBundleInfoOld.ApplicationPackage?.ProductType, appBundleInfoNew.ApplicationPackage?.ProductType);
+            table.DataRow("AppProductCode", appBundleInfoOld.ApplicationPackage?.ProductCode, appBundleInfoNew.ApplicationPackage?.ProductCode);
+            table.DataRow("AppCompanyName", appBundleInfoOld.ApplicationPackage?.CompanyDetails?.Name, appBundleInfoNew.ApplicationPackage?.CompanyDetails?.Name);
+
+            return table;
+        }
+
         public static DataTable ToDataTable(this AppBundleInfo appBundleInfo, bool detail = false)
         {
             if (appBundleInfo == null) return null;
@@ -159,18 +178,32 @@ namespace ricaun.AppBundleTool.AppBundle
             };
         }
 
-        private static DataTable CreateDataColumns(this DataTable table)
+        private static string[] ValueColumns;
+        private static DataTable CreateDataColumns(this DataTable table, params string[] values)
         {
             table.Columns.Add("Name", typeof(string));
-            table.Columns.Add("Value", typeof(string));
+            
+            if (values.Length == 0)
+                values = new[] { "Value" };
+
+            ValueColumns = values;
+
+            foreach (var item in ValueColumns)
+            {
+                table.Columns.Add(item, typeof(string));
+            }
             return table;
         }
 
-        private static DataRow DataRow(this DataTable table, string name, object value)
+        private static DataRow DataRow(this DataTable table, string name, params string[] values)
         {
             var row = table.NewRow();
             row["Name"] = name;
-            row["Value"] = value;
+
+            for (int i = 0; i < ValueColumns.Length; i++)
+            {
+                row[ValueColumns[i]] = values[i];
+            }
             table.Rows.Add(row);
             return row;
         }
