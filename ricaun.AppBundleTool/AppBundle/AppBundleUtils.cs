@@ -15,6 +15,31 @@ namespace ricaun.AppBundleTool.AppBundle
             return Path.Combine(Environment.GetFolderPath(specialFolder), "Autodesk", "ApplicationPlugins");
         }
 
+        /// <summary>
+        /// Finds the <see cref="AppBundleInfo"/> by the specified application bundle name.
+        /// </summary>
+        /// <param name="appBundleName">
+        /// The name of the application bundle to search for. This can be either the application package name or the bundle folder name.
+        /// </param>
+        /// <returns>
+        /// An <see cref="AppBundleInfo"/> object representing the application bundle with the specified name,
+        /// or <c>null</c> if no matching bundle is found or <paramref name="appBundleName"/> is null or whitespace.
+        /// </returns>
+        public static AppBundleInfo FindAppBundle(string appBundleName)
+        {
+            return FindAppBundleByAppName(appBundleName) ?? FindAppBundleByBundleName(appBundleName);
+        }
+
+        /// <summary>
+        /// Finds the <see cref="AppBundleInfo"/> by the application package name.
+        /// </summary>
+        /// <param name="appBundleName">
+        /// The name of the application package to search for.
+        /// </param>
+        /// <returns>
+        /// An <see cref="AppBundleInfo"/> object representing the application bundle with the specified application package name,
+        /// or <c>null</c> if no matching bundle is found or <paramref name="appBundleName"/> is null or whitespace.
+        /// </returns>
         public static AppBundleInfo FindAppBundleByAppName(string appBundleName)
         {
             if (string.IsNullOrWhiteSpace(appBundleName))
@@ -25,6 +50,16 @@ namespace ricaun.AppBundleTool.AppBundle
                 .FirstOrDefault(e => appBundleName.Equals(e.ApplicationPackage?.Name, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        /// <summary>
+        /// Finds the <see cref="AppBundleInfo"/> by the bundle folder name.
+        /// </summary>
+        /// <param name="bundleName">
+        /// The name of the bundle folder to search for.
+        /// </param>
+        /// <returns>
+        /// An <see cref="AppBundleInfo"/> object representing the application bundle with the specified bundle folder name,
+        /// or <c>null</c> if no matching bundle is found or <paramref name="bundleName"/> is null or whitespace.
+        /// </returns>
         public static AppBundleInfo FindAppBundleByBundleName(string bundleName)
         {
             if (string.IsNullOrWhiteSpace(bundleName))

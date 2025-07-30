@@ -14,7 +14,7 @@ namespace ricaun.AppBundleTool.Utils
         /// The name of the temporary folder used for downloads.
         /// </summary>
         public const string TempFolder = "ricaun.AppBundleTool";
-        private const int CACHE_TOTAL_MINUTES = 1;
+        private const double CACHE_TOTAL_MINUTES = 1/60;
 
         /// <summary>
         /// Gets the path to the temporary folder, creating it if it does not exist.
@@ -53,7 +53,7 @@ namespace ricaun.AppBundleTool.Utils
         /// <param name="authentication">Optional authentication token.</param>
         /// <param name="cacheTotalMinutes">The number of minutes to cache the downloaded file before re-downloading.</param>
         /// <returns>The path to the downloaded file.</returns>
-        public static async Task<string> DownloadAsync(string bundleUri, string authentication = null, int cacheTotalMinutes = CACHE_TOTAL_MINUTES)
+        public static async Task<string> DownloadAsync(string bundleUri, string authentication = null, double cacheTotalMinutes = CACHE_TOTAL_MINUTES)
         {
             var tempFolder = GetTempFolder();
             return await DownloadAsync(tempFolder, bundleUri, authentication, cacheTotalMinutes);
@@ -67,7 +67,7 @@ namespace ricaun.AppBundleTool.Utils
         /// <param name="authentication">Optional authentication token.</param>
         /// <param name="cacheTotalMinutes">The number of minutes to cache the downloaded file before re-downloading.</param>
         /// <returns>The path to the downloaded file.</returns>
-        private static async Task<string> DownloadAsync(string tempFolder, string bundleUri, string authentication = null, int cacheTotalMinutes = CACHE_TOTAL_MINUTES)
+        private static async Task<string> DownloadAsync(string tempFolder, string bundleUri, string authentication = null, double cacheTotalMinutes = CACHE_TOTAL_MINUTES)
         {
             var uri = new Uri(bundleUri);
             var appBundleName = Path.GetFileName(uri.LocalPath);

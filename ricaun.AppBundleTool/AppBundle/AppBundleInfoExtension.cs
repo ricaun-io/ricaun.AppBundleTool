@@ -13,7 +13,6 @@ namespace ricaun.AppBundleTool.AppBundle
             if (appBundleInfo is null) return;
             Console.WriteLine($"Name: \t{appBundleInfo.Name}");
             Console.WriteLine($"Path: \t{appBundleInfo.PathBundle}");
-            //Console.WriteLine($"PathPackageContents: \t{appBundleInfo.PathPackageContents}");
             Console.WriteLine($"App: \t{appBundleInfo.ApplicationPackage.AsString()}");
 
             if (showComponents == false) return;
@@ -50,7 +49,7 @@ namespace ricaun.AppBundleTool.AppBundle
                 row["Folder"] = appBundleInfo.AppBundleFolder;
                 row["Bundle"] = appBundleInfo.Name;
                 row["AppName"] = appBundleInfo.ApplicationPackage?.Name ?? string.Empty;
-                row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty;
+                row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? appBundleInfo.ApplicationPackage.GetAutodeskProductByComponents();
                 if (detail)
                 {
                     row["AppVersion"] = appBundleInfo.ApplicationPackage?.AppVersion ?? string.Empty;
@@ -91,7 +90,7 @@ namespace ricaun.AppBundleTool.AppBundle
 
             table.DataRow("Bundle", appBundleInfo.Name);
             table.DataRow("AppName", appBundleInfo.ApplicationPackage?.Name ?? string.Empty);
-            table.DataRow("AppVersion", appBundleInfo.ApplicationPackage?.AppVersion ?? string.Empty);
+            table.DataRow("AppVersion", appBundleInfo.ApplicationPackage?.AppVersion?.ToConsoleGreen() ?? string.Empty);
             table.DataRow("AppProduct", appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty);
             if (detail)
                 table.DataRow("AppDescription", appBundleInfo.ApplicationPackage?.Description ?? string.Empty);
@@ -105,27 +104,6 @@ namespace ricaun.AppBundleTool.AppBundle
             }
             table.DataRow("PathBundle", appBundleInfo.PathBundle);
             table.DataRow("Access", appBundleInfo.AppBundleAccess.ToConsoleString());
-
-            //if (detail)
-            //{
-            //    table.DataRow("Components", string.Empty);
-            //    foreach (var component in appBundleInfo.ApplicationPackage?.Components)
-            //    {
-            //        if (component is null) continue;
-
-            //        table.DataRow("Component.Description", component.Description);
-            //        table.DataRow("Requirements.Platform", component.RuntimeRequirements?.Platform);
-            //        table.DataRow("Requirements.OS", component.RuntimeRequirements?.OS);
-            //        table.DataRow("Requirements.SeriesMin", component.RuntimeRequirements?.SeriesMin);
-            //        table.DataRow("Requirements.SeriesMax", component.RuntimeRequirements?.SeriesMax);
-
-            //        foreach (var componentEntry in component.ComponentEntry)
-            //        {
-            //            table.DataRow("ComponentEntry.AppName", componentEntry.AppName);
-            //            table.DataRow("ComponentEntry.ModuleName", componentEntry.ModuleName);
-            //        }
-            //    }
-            //}
 
             return table;
         }
@@ -159,18 +137,32 @@ namespace ricaun.AppBundleTool.AppBundle
             };
         }
 
-        private static DataTable CreateDataColumns(this DataTable table)
+        private static string[] ValueColumns;
+        private static DataTable CreateDataColumns(this DataTable table, params string[] values)
         {
             table.Columns.Add("Name", typeof(string));
-            table.Columns.Add("Value", typeof(string));
+            
+            if (values.Length == 0)
+                values = new[] { "Value" };
+
+            ValueColumns = values;
+
+            foreach (var item in ValueColumns)
+            {
+                table.Columns.Add(item, typeof(string));
+            }
             return table;
         }
 
-        private static DataRow DataRow(this DataTable table, string name, object value)
+        private static DataRow DataRow(this DataTable table, string name, params string[] values)
         {
             var row = table.NewRow();
             row["Name"] = name;
-            row["Value"] = value;
+
+            for (int i = 0; i < ValueColumns.Length; i++)
+            {
+                row[ValueColumns[i]] = values[i];
+            }
             table.Rows.Add(row);
             return row;
         }

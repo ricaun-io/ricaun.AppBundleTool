@@ -8,6 +8,14 @@
 
 Command line tool to Install/Uninstall Autodesk AppBundle.
 
+[![AppBundleTool --list](https://raw.githubusercontent.com/ricaun-io/ricaun.AppBundleTool/refs/heads/develop/Resources/list.png)](https://github.com/ricaun-io/ricaun.AppBundleTool)
+
+## Autodesk AppBundle
+
+The AppBundle is a standardized format for Autodesk applications. This package format enables the application or addin to be loaded in many different Autodesk products and versions.
+
+Check the [Autodesk.PackageBuilder](https://github.com/ricaun-io/Autodesk.PackageBuilder) package for more information how the standard work between Autodesk products.
+
 ## Install Tool
 
 ```bash
@@ -28,21 +36,21 @@ AppBundleTool -l
 
 ### AppBundle information
 
-Command `-a` and `--app` to show information about a bundle.
+Command `-a` and `--app` to show information about a bundle. 
 ```bash
 AppBundleTool -a <bundle-path.zip or bundle-name>
 ```
 
 ### Install
 
-Command `-i` and `--install` to install a tool.
+Command `-i` and `--install` to install the bundle. The bundle is installed in the current user folder (`%AppData%`) by default, if the package is already installed, the same folder is selected and installed over the existing files.
 ```bash
 AppBundleTool -a <bundle-path.zip> -i
 ```
 
 ### Uninstall
 
-Command `-u` and `--uninstall` to uninstall a tool.
+Command `-u` and `--uninstall` to uninstall the bundle. The bundle is uninstalled by sending the folder to the recycle bin.
 ```bash
 AppBundleTool -a <bundle-path.zip or bundle-name> -u
 ```
@@ -62,16 +70,6 @@ AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/
 ```bash
 AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/download/1.1.0/RevitAddin.CommandLoader.bundle.zip -i
 ```
-
-## Autodesk AppBundle
-
-The AppBundle is a standardized format for Autodesk applications. This package format enables the application or addin to be loaded in many different Autodesk products and versions.
-
-### References
-
-* [AppBundle: Autodesk Products - 2020](https://www.autodesk.com/autodesk-university/class/AppBundle-Cross-Distribution-Autodesk-Products-App-Store-and-Forge-2020)
-* [AppBundle Structure: Revit - 2018](https://github.com/jeremytammik/tbc/blob/gh-pages/a/zip/da4r_au_2018/AppBundle.md)
-* [Autodesk Autoloader White Paper - 2013](https://adndevblog.typepad.com/autocad/2013/01/autodesk-autoloader-white-paper.html)
 
 ## License
 

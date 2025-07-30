@@ -67,12 +67,11 @@
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="" Visible="false" />
     <None Include="..\LICENSE" Pack="true" PackagePath="" Visible="false" />
-    <None Include=".\icon.png" Pack="true" PackagePath="" Visible="false" />
+    <None Include="..\Resources\icon.png" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="*" />
-    <PackageReference Include="ricaun.Revit.Installation" Version="*" />
   </ItemGroup>
 
   <ItemGroup>

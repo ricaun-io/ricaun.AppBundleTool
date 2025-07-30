@@ -67,6 +67,33 @@ namespace ricaun.AppBundleTool.PackageContents
         }
 
         /// <summary>
+        /// Gets a string containing the distinct Autodesk product platforms from the components of the application package.
+        /// </summary>
+        /// <param name="applicationPackage">The application package to analyze.</param>
+        /// <returns>
+        /// A string containing the distinct platform names separated by a bar ('|'), or an empty string if the package or its components are null.
+        /// </returns>
+        public static string GetAutodeskProductByComponents(this ApplicationPackage applicationPackage)
+        {
+            var appProduct = string.Empty;
+
+            if (applicationPackage is null)
+                return appProduct;
+
+            if (applicationPackage.Components is null)
+                return appProduct;
+
+            var components = applicationPackage.Components;
+
+            var groupedComponents = components
+                .GroupBy(c => c?.RuntimeRequirements?.Platform ?? string.Empty)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            appProduct = string.Join("|", groupedComponents.Keys.Where(e => !string.IsNullOrWhiteSpace(e)));
+            return appProduct;
+        }
+
+        /// <summary>
         /// Determines whether the runtime requirements match the specified platform, operating system, and minimum series version.
         /// </summary>
         /// <param name="runtimeRequirements">The runtime requirements to check.</param>
