@@ -13,7 +13,6 @@ namespace ricaun.AppBundleTool.AppBundle
             if (appBundleInfo is null) return;
             Console.WriteLine($"Name: \t{appBundleInfo.Name}");
             Console.WriteLine($"Path: \t{appBundleInfo.PathBundle}");
-            //Console.WriteLine($"PathPackageContents: \t{appBundleInfo.PathPackageContents}");
             Console.WriteLine($"App: \t{appBundleInfo.ApplicationPackage.AsString()}");
 
             if (showComponents == false) return;
@@ -105,27 +104,6 @@ namespace ricaun.AppBundleTool.AppBundle
             }
             table.DataRow("PathBundle", appBundleInfo.PathBundle);
             table.DataRow("Access", appBundleInfo.AppBundleAccess.ToConsoleString());
-
-            //if (detail)
-            //{
-            //    table.DataRow("Components", string.Empty);
-            //    foreach (var component in appBundleInfo.ApplicationPackage?.Components)
-            //    {
-            //        if (component is null) continue;
-
-            //        table.DataRow("Component.Description", component.Description);
-            //        table.DataRow("Requirements.Platform", component.RuntimeRequirements?.Platform);
-            //        table.DataRow("Requirements.OS", component.RuntimeRequirements?.OS);
-            //        table.DataRow("Requirements.SeriesMin", component.RuntimeRequirements?.SeriesMin);
-            //        table.DataRow("Requirements.SeriesMax", component.RuntimeRequirements?.SeriesMax);
-
-            //        foreach (var componentEntry in component.ComponentEntry)
-            //        {
-            //            table.DataRow("ComponentEntry.AppName", componentEntry.AppName);
-            //            table.DataRow("ComponentEntry.ModuleName", componentEntry.ModuleName);
-            //        }
-            //    }
-            //}
 
             return table;
         }

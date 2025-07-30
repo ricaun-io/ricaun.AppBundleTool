@@ -63,9 +63,6 @@ namespace ricaun.AppBundleTool
                             applicationPluginsFolder = appBundleInstalled.AppBundleFolder.GetApplicationPlugins();
                         }
 
-                        // Print different between the appBundleInfoTemp and appBundleInstalled
-                        //appBundleInfoTemp.ToDataTable(appBundleInstalled)?.Print();
-
                         // Copy all files of the folder to a different folder.
                         if (appBundleInstalled is not null)
                         {
