@@ -34,21 +34,21 @@ AppBundleTool -l
 
 ### AppBundle information
 
-Command `-a` and `--app` to show information about a bundle.
+Command `-a` and `--app` to show information about a bundle. 
 ```bash
 AppBundleTool -a <bundle-path.zip or bundle-name>
 ```
 
 ### Install
 
-Command `-i` and `--install` to install a tool.
+Command `-i` and `--install` to install the bundle. The bundle is installed in the current user folder (`%AppData%`) by default, if the package is already installed, the same folder is selected and installed over the existing files.
 ```bash
 AppBundleTool -a <bundle-path.zip> -i
 ```
 
 ### Uninstall
 
-Command `-u` and `--uninstall` to uninstall a tool.
+Command `-u` and `--uninstall` to uninstall the bundle. The bundle is uninstalled by sending the folder to the recycle bin.
 ```bash
 AppBundleTool -a <bundle-path.zip or bundle-name> -u
 ```
