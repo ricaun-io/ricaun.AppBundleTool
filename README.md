@@ -8,7 +8,7 @@
 
 Command line tool to Install/Uninstall Autodesk AppBundle.
 
-[![AppBundleTool --list](https://raw.githubusercontent.com/ricaun-io/ricaun.AppBundleTool/refs/heads/develop/ricaun.AppBundleTool/Resources/list.png)](https://github.com/ricaun-io/ricaun.AppBundleTool)
+[![AppBundleTool --list](https://raw.githubusercontent.com/ricaun-io/ricaun.AppBundleTool/refs/heads/develop/Resources/list.png)](https://github.com/ricaun-io/ricaun.AppBundleTool)
 
 ## Autodesk AppBundle
 
