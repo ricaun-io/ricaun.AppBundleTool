@@ -2,7 +2,6 @@
 using ricaun.AppBundleTool.AppBundle;
 using ricaun.AppBundleTool.PackageContents;
 using ricaun.AppBundleTool.Utils;
-using ricaun.Revit.Installation;
 using System;
 using System.Collections.Generic;
 using System.Data;

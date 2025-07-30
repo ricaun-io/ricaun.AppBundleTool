@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `ConsoleTaskExtension` to wait task to finish and show progress bar.
 - Update `AppBundleUtils` with `FindAppBundle` to find `AppBundle` by app name or bundle folder.
 - Update `CACHE_TOTAL_MINUTES` in `DownloadUtils` to 1 second.
+- Remove `ricaun.Revit.Installation` package reference.
 
 ## [1.0.1] / 2025-05-31
 ### Features

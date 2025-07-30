@@ -72,7 +72,6 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="*" />
-    <PackageReference Include="ricaun.Revit.Installation" Version="*" />
   </ItemGroup>
 
   <ItemGroup>
