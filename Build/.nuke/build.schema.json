@@ -27,8 +27,10 @@
         "Build",
         "Clean",
         "Compile",
+        "GitPreRelease",
         "GitRelease",
         "Pack",
+        "PrePack",
         "Release",
         "Sign"
       ]
@@ -124,6 +126,12 @@
         "NuGetApiUrl": {
           "type": "string",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
+        "PreReleaseFilter": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "ReleaseFolder": {
           "type": "string"

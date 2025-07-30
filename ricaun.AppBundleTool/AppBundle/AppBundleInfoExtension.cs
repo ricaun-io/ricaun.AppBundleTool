@@ -50,7 +50,7 @@ namespace ricaun.AppBundleTool.AppBundle
                 row["Folder"] = appBundleInfo.AppBundleFolder;
                 row["Bundle"] = appBundleInfo.Name;
                 row["AppName"] = appBundleInfo.ApplicationPackage?.Name ?? string.Empty;
-                row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty;
+                row["AppProduct"] = appBundleInfo.ApplicationPackage?.AutodeskProduct ?? appBundleInfo.ApplicationPackage.GetAutodeskProductByComponents();
                 if (detail)
                 {
                     row["AppVersion"] = appBundleInfo.ApplicationPackage?.AppVersion ?? string.Empty;
