@@ -8,6 +8,8 @@
 
 Command line tool to Install/Uninstall Autodesk AppBundle.
 
+[![AppBundleTool --list](https://raw.githubusercontent.com/ricaun-io/ricaun.AppBundleTool/refs/heads/develop/ricaun.AppBundleTool/Resources/list.png)](https://github.com/ricaun-io/ricaun.AppBundleTool)
+
 ## Autodesk AppBundle
 
 The AppBundle is a standardized format for Autodesk applications. This package format enables the application or addin to be loaded in many different Autodesk products and versions.
