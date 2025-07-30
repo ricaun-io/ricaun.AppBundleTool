@@ -7,4 +7,5 @@ AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/
 AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle.zip -i
 AppBundleTool -a RevitAddin.CommandLoader.bundle -u
 AppBundleTool -a RevitAddin.CommandLoader
+AppBundleTool -a https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle.zip -i
 timeout 10
