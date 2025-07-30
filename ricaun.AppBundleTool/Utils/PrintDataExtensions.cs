@@ -466,8 +466,6 @@ namespace ricaun.AppBundleTool.Utils
             }
 
             WriteLine(footer);
-
-            WriteLine();
         }
 
         private static void PrintRows(DataView dataView, bool rowOrdinals, int top, ValueToStringEventHandler toString, string[] columnNames)

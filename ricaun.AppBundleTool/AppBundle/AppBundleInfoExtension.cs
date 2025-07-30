@@ -82,25 +82,6 @@ namespace ricaun.AppBundleTool.AppBundle
             return tables.ToArray();
         }
 
-        public static DataTable ToDataTable(this AppBundleInfo appBundleInfoNew, AppBundleInfo appBundleInfoOld)
-        {
-            if (appBundleInfoNew == null) return null;
-            if (appBundleInfoOld == null) return null;
-
-            var table = new DataTable();
-
-            table.CreateDataColumns("Old", "New");
-
-            table.DataRow("AppName", appBundleInfoOld.ApplicationPackage?.Name, appBundleInfoNew.ApplicationPackage?.Name);
-            table.DataRow("AppVersion", appBundleInfoOld.ApplicationPackage?.AppVersion?.ToConsoleYellow(), appBundleInfoNew.ApplicationPackage?.AppVersion?.ToConsoleGreen());
-            table.DataRow("AppProduct", appBundleInfoOld.ApplicationPackage?.AutodeskProduct, appBundleInfoNew.ApplicationPackage?.AutodeskProduct);
-            table.DataRow("AppProductType", appBundleInfoOld.ApplicationPackage?.ProductType, appBundleInfoNew.ApplicationPackage?.ProductType);
-            table.DataRow("AppProductCode", appBundleInfoOld.ApplicationPackage?.ProductCode, appBundleInfoNew.ApplicationPackage?.ProductCode);
-            table.DataRow("AppCompanyName", appBundleInfoOld.ApplicationPackage?.CompanyDetails?.Name, appBundleInfoNew.ApplicationPackage?.CompanyDetails?.Name);
-
-            return table;
-        }
-
         public static DataTable ToDataTable(this AppBundleInfo appBundleInfo, bool detail = false)
         {
             if (appBundleInfo == null) return null;
@@ -110,7 +91,7 @@ namespace ricaun.AppBundleTool.AppBundle
 
             table.DataRow("Bundle", appBundleInfo.Name);
             table.DataRow("AppName", appBundleInfo.ApplicationPackage?.Name ?? string.Empty);
-            table.DataRow("AppVersion", appBundleInfo.ApplicationPackage?.AppVersion ?? string.Empty);
+            table.DataRow("AppVersion", appBundleInfo.ApplicationPackage?.AppVersion?.ToConsoleGreen() ?? string.Empty);
             table.DataRow("AppProduct", appBundleInfo.ApplicationPackage?.AutodeskProduct ?? string.Empty);
             if (detail)
                 table.DataRow("AppDescription", appBundleInfo.ApplicationPackage?.Description ?? string.Empty);

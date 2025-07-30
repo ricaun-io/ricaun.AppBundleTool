@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.2]
+### Updates
+- Update `CreateDataColumns` to support more values in the `DataTable`.
+- Add `ConsoleTaskExtension` to wait task to finish and show progress bar.
+- Update `AppBundleUtils` with `FindAppBundle` to find `AppBundle` by app name or bundle folder.
+
 ## [1.0.1] / 2025-05-31
 ### Features
 - Support `Autodesk` native bundle with admin privileges.
