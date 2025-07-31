@@ -75,7 +75,8 @@ namespace ricaun.AppBundleTool
                         }
                         Console.WriteLine(installMessage);
                     }
-                    AppBundleUtils.FindAppBundleByAppName(appBundleName)?.ToDataTable().Print();
+                    var appBundleInfo = AppBundleUtils.FindAppBundleByAppName(appBundleName);
+                    appBundleInfo.Show(Verbosity);
                 }
                 else if (options.Uninstall)
                 {
@@ -119,12 +120,12 @@ namespace ricaun.AppBundleTool
                     {
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
                         var appBundleInfo = AppBundleUtils.FindAppBundleByAppName(appBundleName);
-                        appBundleInfo?.Show();
                         if (appBundleInfo is null)
                         {
                             Console.WriteLine($"AppBundle '{appBundleName}' not found.".ToConsoleRed());
                             return;
                         }
+                        appBundleInfo.Show(Verbosity);
                     }
                     else
                     {
@@ -134,18 +135,15 @@ namespace ricaun.AppBundleTool
                 }
                 else
                 {
-                    var appBundle = AppBundleUtils.FindAppBundle(appBundleName);
-                    if (appBundle is null)
+                    var appBundleInfo = AppBundleUtils.FindAppBundle(appBundleName);
+                    if (appBundleInfo is null)
                     {
                         Show();
                         Console.WriteLine($"AppBundle '{appBundleName}' not found.".ToConsoleYellow());
                         return;
                     }
 
-                    foreach (var table in appBundle.ToDataTables(Verbosity))
-                    {
-                        table.Print();
-                    }
+                    appBundleInfo.Show(Verbosity);
                 }
             }
             else
@@ -212,7 +210,7 @@ namespace ricaun.AppBundleTool
         public static void Show()
         {
             var appBundles = AppBundleUtils.GetAppBundles();
-            appBundles.ToDataTable(Verbosity).Print();
+            appBundles.Show(Verbosity);
         }
 
         private static string DisplayHelp<T>(ParserResult<T> result)

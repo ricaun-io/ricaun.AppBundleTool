@@ -88,7 +88,6 @@ namespace ricaun.AppBundleTool.Utils
         {
             return $"{GREY}{value}{NORMAL}";
         }
-        
 
         static string NORMAL => Console.IsOutputRedirected ? "" : "\x1b[39m";
         static string RED => Console.IsOutputRedirected ? "" : "\x1b[91m";
