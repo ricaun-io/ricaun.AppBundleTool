@@ -119,11 +119,14 @@ namespace ricaun.AppBundleTool
                     {
                         appBundleName = appBundleInfoTemp.ApplicationPackage.Name;
                         var appBundleInfo = AppBundleUtils.FindAppBundleByAppName(appBundleName);
-                        appBundleInfo?.Show();
                         if (appBundleInfo is null)
                         {
                             Console.WriteLine($"AppBundle '{appBundleName}' not found.".ToConsoleRed());
                             return;
+                        }
+                        foreach (var table in appBundleInfo.ToDataTables(Verbosity))
+                        {
+                            table.Print();
                         }
                     }
                     else

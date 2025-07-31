@@ -8,6 +8,7 @@ namespace ricaun.AppBundleTool.AppBundle
 {
     internal static class AppBundleInfoExtension
     {
+        [Obsolete("Use the AppBundleInfo?.ToDataTable().Print()")]
         public static void Show(this AppBundleInfo appBundleInfo, bool showComponents = false)
         {
             if (appBundleInfo is null) return;
