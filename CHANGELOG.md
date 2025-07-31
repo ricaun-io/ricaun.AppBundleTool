@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.3] / 2025-07-31
 ### Updates
 - Fix local bundle information when install.
+- Update `Show` method in the `AppBundleInfo` extension.
 
 ## [1.0.2] / 2025-07-30
 ### Features
