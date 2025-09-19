@@ -14,7 +14,7 @@ namespace ricaun.AppBundleTool.Utils
         /// The name of the temporary folder used for downloads.
         /// </summary>
         public const string TempFolder = "ricaun.AppBundleTool";
-        private const double CACHE_TOTAL_MINUTES = 1/60;
+        private const double CACHE_TOTAL_MINUTES = 1 / 60;
 
         /// <summary>
         /// Gets the path to the temporary folder, creating it if it does not exist.
@@ -100,12 +100,39 @@ namespace ricaun.AppBundleTool.Utils
             if (string.IsNullOrWhiteSpace(authentication) == false)
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authentication}");
 
-            var response = await client.GetAsync(bundleUri);
+            var response = await client.GetAsync(bundleUri, HttpCompletionOption.ResponseHeadersRead);
 
-            using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            await response.Content.CopyToAsync(fileStream);
+            //using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            //await response.Content.CopyToAsync(fileStream);
+
+            // Total size (might be null if server doesn't send Content-Length)
+            var contentLengthHeader = response.Content.Headers.ContentLength;
+            var contentLength = contentLengthHeader.HasValue ? contentLengthHeader.Value : -1L;
+
+            await using var contentStream = await response.Content.ReadAsStreamAsync();
+            await using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
+
+            var buffer = new byte[81920]; // 80 KB chunks
+            long totalRead = 0;
+            int read;
+            DownloadProgress?.Invoke(totalRead, contentLength);
+            do
+            {
+                read = await contentStream.ReadAsync(buffer.AsMemory(0, buffer.Length));
+                if (read == 0) break;
+
+                await fileStream.WriteAsync(buffer.AsMemory(0, read));
+                totalRead += read;
+
+                DownloadProgress?.Invoke(totalRead, contentLength);
+            } while (true);
 
             return bundlePath;
         }
+
+        /// <summary>
+        /// An action that reports download progress. (total bytes downloaded, total bytes to download)
+        /// </summary>
+        public static Action<long, long> DownloadProgress { get; set; }
     }
 }
