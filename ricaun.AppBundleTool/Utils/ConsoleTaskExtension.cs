@@ -15,8 +15,9 @@ namespace ricaun.AppBundleTool.Utils
         /// <typeparam name="T">The type of the result produced by the task.</typeparam>
         /// <param name="task">The task to wait for.</param>
         /// <param name="processingText">Optional text to display while processing. Defaults to "Processing..." if not specified.</param>
+        /// <param name="processFunc"></param>
         /// <returns>The result produced by the completed task.</returns>
-        public static T ConsoleWaitResult<T>(this Task<T> task, string processingText = null)
+        public static T ConsoleWaitResult<T>(this Task<T> task, string processingText = null, Func<string> processFunc = null)
         {
             var spinner = new[] { '|', '/', '-', '\\' };
             int counter = 0;
@@ -28,10 +29,12 @@ namespace ricaun.AppBundleTool.Utils
 
             while (!task.IsCompleted)
             {
-                Console.Write($"\r{processingText} {spinner[counter++ % spinner.Length]} ");
+                var processText = processFunc?.Invoke();
+                Console.Write($"\r{processingText} {spinner[counter++ % spinner.Length]} {processText} ");
                 Thread.Sleep(50);
             }
-            Console.WriteLine($"\r{processingText}  ");
+            var spaces = new string(' ', processFunc?.Invoke()?.Length ?? 0);
+            Console.WriteLine($"\r{processingText}  {spaces} ");
 
             return task.GetAwaiter().GetResult();
         }
