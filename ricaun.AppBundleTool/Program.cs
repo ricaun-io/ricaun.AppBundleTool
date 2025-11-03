@@ -190,8 +190,12 @@ namespace ricaun.AppBundleTool
             };
             var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).ConsoleWaitResult(downloadProgress, () => { return processPercentage; });
 
+            var bundlePathFolderName = Path.GetFileNameWithoutExtension(bundlePathZip);
+            if (NameAndVersionBundleUtils.TryGetNameAndVersionBundle(bundlePathFolderName, out string name, out string _))
+                bundlePathFolderName = name + Path.GetExtension(bundlePathFolderName);
+
             // unzip file to folder
-            var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), Path.GetFileNameWithoutExtension(bundlePathZip));
+            var bundlePathFolder = Path.Combine(Path.GetDirectoryName(bundlePathZip), bundlePathFolderName);
             if (Directory.Exists(bundlePathFolder))
                 Directory.Delete(bundlePathFolder, true);
 

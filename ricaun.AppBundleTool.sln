@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35728.132 d17.12
+VisualStudioVersion = 17.12.35728.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{A5D13B37-DD47-442A-AB51-EED6B3832B26}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ricaun.AppBundleTool", "ric
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Build\Build.csproj", "{A3745FFF-BAF2-4372-B296-69189D272969}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ricaun.AppBundleTool.Tests", "ricaun.AppBundleTool.Tests\ricaun.AppBundleTool.Tests.csproj", "{E523F919-DCD6-4C88-BC17-FB5C97A860EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FB8D90B7-1370-4E50-91EE-0B0FB45B373E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A3745FFF-BAF2-4372-B296-69189D272969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A3745FFF-BAF2-4372-B296-69189D272969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E523F919-DCD6-4C88-BC17-FB5C97A860EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E523F919-DCD6-4C88-BC17-FB5C97A860EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E523F919-DCD6-4C88-BC17-FB5C97A860EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E523F919-DCD6-4C88-BC17-FB5C97A860EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
