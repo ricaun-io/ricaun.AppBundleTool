@@ -89,19 +89,57 @@ namespace ricaun.AppBundleTool.Utils
             return $"{GREY}{value}{NORMAL}";
         }
 
-        static string NORMAL => Console.IsOutputRedirected ? "" : "\x1b[39m";
-        static string RED => Console.IsOutputRedirected ? "" : "\x1b[91m";
-        static string GREEN => Console.IsOutputRedirected ? "" : "\x1b[92m";
-        static string YELLOW => Console.IsOutputRedirected ? "" : "\x1b[93m";
-        static string BLUE => Console.IsOutputRedirected ? "" : "\x1b[94m";
-        static string MAGENTA => Console.IsOutputRedirected ? "" : "\x1b[95m";
-        static string CYAN => Console.IsOutputRedirected ? "" : "\x1b[96m";
-        static string GREY => Console.IsOutputRedirected ? "" : "\x1b[97m";
-        static string BOLD => Console.IsOutputRedirected ? "" : "\x1b[1m";
-        static string NOBOLD => Console.IsOutputRedirected ? "" : "\x1b[22m";
-        static string UNDERLINE => Console.IsOutputRedirected ? "" : "\x1b[4m";
-        static string NOUNDERLINE => Console.IsOutputRedirected ? "" : "\x1b[24m";
-        static string REVERSE => Console.IsOutputRedirected ? "" : "\x1b[7m";
-        static string NOREVERSE => Console.IsOutputRedirected ? "" : "\x1b[27m";
+        static string NORMAL => IsAnsiSupported ? "\x1b[39m" : string.Empty;
+        static string RED => IsAnsiSupported ? "\x1b[91m" : string.Empty;
+        static string GREEN => IsAnsiSupported ? "\x1b[92m" : string.Empty;
+        static string YELLOW => IsAnsiSupported ? "\x1b[93m" : string.Empty;
+        static string BLUE => IsAnsiSupported ? "\x1b[94m" : string.Empty;
+        static string MAGENTA => IsAnsiSupported ? "\x1b[95m" : string.Empty;
+        static string CYAN => IsAnsiSupported ? "\x1b[96m" : string.Empty;
+        static string GREY => IsAnsiSupported ? "\x1b[97m" : string.Empty;
+        static string BOLD => IsAnsiSupported ? "\x1b[1m" : string.Empty;
+        static string NOBOLD => IsAnsiSupported ? "\x1b[22m" : string.Empty;
+        static string UNDERLINE => IsAnsiSupported ? "\x1b[4m" : string.Empty;
+        static string NOUNDERLINE => IsAnsiSupported ? "\x1b[24m" : string.Empty;
+        static string REVERSE => IsAnsiSupported ? "\x1b[7m" : string.Empty;
+        static string NOREVERSE => IsAnsiSupported ? "\x1b[27m" : string.Empty;
+
+        internal static bool IsAnsiSupported { get; } = SupportsAnsi();
+        internal static bool SupportsAnsi()
+        {
+            if (Console.IsOutputRedirected)
+                return false;
+
+            if (!OperatingSystem.IsWindows())
+                return true;
+
+            if (!OperatingSystem.IsWindowsVersionAtLeast(10))
+                return false;
+
+            return Windows.IsAnsiEnabledOnWindows();
+        }
+        static class Windows
+        {
+            internal static bool IsAnsiEnabledOnWindows()
+            {
+                const int STD_OUTPUT_HANDLE = -11;
+                const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+
+                IntPtr handle = GetStdHandle(STD_OUTPUT_HANDLE);
+                if (handle == IntPtr.Zero)
+                    return false;
+
+                if (!GetConsoleMode(handle, out uint mode))
+                    return false;
+
+                return (mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0;
+            }
+
+            [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+            static extern IntPtr GetStdHandle(int nStdHandle);
+
+            [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+            static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
+        }
     }
 }
