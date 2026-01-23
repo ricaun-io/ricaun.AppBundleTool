@@ -63,7 +63,6 @@ namespace ricaun.AppBundleTool
         {
             var bundle = new BundleUri(options.App);
             var appBundleName = bundle.AppName;
-                Console.WriteLine($"{bundle.BundleNameZip} {bundle.BundleName} {bundle.AppName} {bundle.IsValid()}");
             if (bundle.IsValid())
             {
                 if (options.Install)
