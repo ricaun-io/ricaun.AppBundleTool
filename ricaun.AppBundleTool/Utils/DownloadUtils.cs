@@ -77,6 +77,9 @@ namespace ricaun.AppBundleTool.Utils
             if (!uri.IsAbsoluteUri) // Relative URI
             {
                 var appBundleName = Path.GetFileName(uri.OriginalString);
+
+                appBundleName = NameAndVersionBundleUtils.RemoveVersionBundle(appBundleName);
+
                 if (Path.GetExtension(appBundleName) != ".zip")
                     throw new FileNotFoundException("The specified local bundle file does not have a .zip extension.", uri.OriginalString);
 
@@ -91,7 +94,6 @@ namespace ricaun.AppBundleTool.Utils
             }
             else
             {
-                var appBundleName = Path.GetFileName(uri.LocalPath);
 
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
@@ -105,11 +107,15 @@ namespace ricaun.AppBundleTool.Utils
                 var contentLengthHeader = response.Content.Headers.ContentLength;
                 var contentLength = contentLengthHeader.HasValue ? contentLengthHeader.Value : -1L;
 
+                var appBundleName = Path.GetFileName(uri.LocalPath);
+
                 // Check Content-Disposition
                 if (response.Content.Headers.ContentDisposition?.FileName is not null)
                 {
                     appBundleName = response.Content.Headers.ContentDisposition.FileName.Trim('\"');
                 }
+
+                appBundleName = NameAndVersionBundleUtils.RemoveVersionBundle(appBundleName);
 
                 if (Path.GetExtension(appBundleName) != ".zip")
                     throw new FileNotFoundException("The specified local bundle file does not have a .zip extension.", uri.OriginalString);
