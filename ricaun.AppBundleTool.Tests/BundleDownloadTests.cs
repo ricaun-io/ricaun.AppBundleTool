@@ -11,7 +11,7 @@ namespace ricaun.AppBundleTool.Tests
         [TestCase("https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle.zip?test=123")]
         public async Task SampleDownloadTest(string bundleUri)
         {
-            var path = await DownloadUtils.DownloadAsync(bundleUri);
+            var path = await BundleDownloadUtils.DownloadAsync(bundleUri);
             try
             {
                 System.Console.WriteLine(path);

@@ -183,12 +183,12 @@ namespace ricaun.AppBundleTool
             var downloadProgress = $"Download: {bundleName.ToConsoleGreen()}";
 
             var processPercentage = "";
-            DownloadUtils.DownloadProgress = (value, total) =>
+            BundleDownloadUtils.DownloadProgress = (value, total) =>
             {
                 if (total > 0)
                     processPercentage = $"{100.0 * value / total:0.00}%";
             };
-            var bundlePathZip = DownloadUtils.DownloadAsync(bundleUrl).ConsoleWaitResult(downloadProgress, () => { return processPercentage; });
+            var bundlePathZip = BundleDownloadUtils.DownloadAsync(bundleUrl).ConsoleWaitResult(downloadProgress, () => { return processPercentage; });
 
             var bundlePathFolderName = Path.GetFileNameWithoutExtension(bundlePathZip);
             if (NameAndVersionBundleUtils.TryGetNameAndVersionBundle(bundlePathFolderName, out string name, out string _))

@@ -8,7 +8,7 @@ namespace ricaun.AppBundleTool.Utils
     /// <summary>
     /// Provides utility methods for downloading files and managing temporary folders.
     /// </summary>
-    public static class DownloadUtils
+    public static class BundleDownloadUtils
     {
         /// <summary>
         /// The name of the temporary folder used for downloads.
