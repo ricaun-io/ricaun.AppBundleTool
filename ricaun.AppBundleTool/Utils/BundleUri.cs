@@ -18,7 +18,17 @@ namespace ricaun.AppBundleTool.Utils
         /// <summary>
         /// Gets the name of the bundle file without version information.
         /// </summary>
+        public string BundleNameZip { get; }
+
+        /// <summary>
+        /// Gets the base name of the bundle without the .zip extension.
+        /// </summary>
         public string BundleName { get; }
+
+        /// <summary>
+        /// Gets the application name derived from the bundle name.
+        /// </summary>
+        public string AppName { get; }
 
         /// <summary>
         /// The authentication token used for HTTP requests.
@@ -54,7 +64,15 @@ namespace ricaun.AppBundleTool.Utils
         {
             this.Uri = uri;
             this.authentication = authentication;
-            this.BundleName = GetBundleName();
+            this.BundleNameZip = GetBundleName();
+            this.BundleName = this.BundleNameZip;
+            this.AppName = this.BundleName;
+
+            if (Path.GetExtension(this.BundleNameZip) == ".zip")
+                this.BundleName = Path.GetFileNameWithoutExtension(this.BundleNameZip);
+
+            if (Path.GetExtension(this.BundleName) == ".bundle")
+                this.AppName = Path.GetFileNameWithoutExtension(this.BundleName);
         }
 
         /// <summary>
@@ -80,11 +98,11 @@ namespace ricaun.AppBundleTool.Utils
         /// <returns><c>true</c> if the bundle name is valid; otherwise, <c>false</c>.</returns>
         public bool IsValid()
         {
-            if (string.IsNullOrEmpty(BundleName))
+            if (string.IsNullOrEmpty(BundleNameZip))
                 return false;
 
-            var extensionZip = Path.GetExtension(BundleName);
-            var extensionBundle = Path.GetExtension(Path.GetFileNameWithoutExtension(BundleName));
+            var extensionZip = Path.GetExtension(BundleNameZip);
+            var extensionBundle = Path.GetExtension(Path.GetFileNameWithoutExtension(BundleNameZip));
 
             return extensionZip == ".zip" && extensionBundle == ".bundle";
         }
@@ -107,7 +125,7 @@ namespace ricaun.AppBundleTool.Utils
             var fullPath = Uri.IsAbsoluteUri ? Uri.LocalPath : Path.GetFullPath(Uri.OriginalString);
             if (File.Exists(fullPath))
             {
-                var bundlePath = Path.Combine(destinationFolder, BundleName);
+                var bundlePath = Path.Combine(destinationFolder, BundleNameZip);
                 File.Copy(fullPath, bundlePath, true);
                 return bundlePath;
             }
@@ -143,7 +161,7 @@ namespace ricaun.AppBundleTool.Utils
             if (client is null)
                 await ClientGetBundleNameAsync();
 
-            var bundlePath = Path.Combine(destinationFolder, BundleName);
+            var bundlePath = Path.Combine(destinationFolder, BundleNameZip);
 
             // Total size (might be null if server doesn't send Content-Length)
             var contentLengthHeader = response.Content.Headers.ContentLength;
