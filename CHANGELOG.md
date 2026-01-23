@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix `Console` not supporting colors in some terminals. (Fix: #7)
 ### Updates
 - Update `NameAndVersionBundleUtils` with `RemoveVersionBundle` to remove version from bundle file name.
+- Update `BundleDownloadUtils` to support download url with parameters and local file path.
 ### Tests
 - Add `BundleDownloadTests` to test download url with parameters.
 - Add `UriTests` to test uri with local files or urls.

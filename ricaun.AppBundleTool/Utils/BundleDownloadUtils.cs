@@ -73,7 +73,7 @@ namespace ricaun.AppBundleTool.Utils
             {
                 throw new ArgumentException("Invalid bundle URI.", nameof(bundleUri));
             }
-
+            
             if (!uri.IsAbsoluteUri) // Relative URI
             {
                 var appBundleName = Path.GetFileName(uri.OriginalString);
@@ -92,9 +92,23 @@ namespace ricaun.AppBundleTool.Utils
                 }
                 throw new FileNotFoundException("The specified local bundle file does not exist.", fullPath);
             }
+            else if (uri.IsFile) // File URI
+            {
+                var appBundleName = Path.GetFileName(uri.LocalPath);
+                appBundleName = NameAndVersionBundleUtils.RemoveVersionBundle(appBundleName);
+                if (Path.GetExtension(appBundleName) != ".zip")
+                    throw new FileNotFoundException("The specified local bundle file does not have a .zip extension.", uri.OriginalString);
+                var bundlePath = Path.Combine(tempFolder, appBundleName);
+                var fullPath = uri.LocalPath;
+                if (File.Exists(fullPath))
+                {
+                    File.Copy(fullPath, bundlePath, true);
+                    return bundlePath;
+                }
+                throw new FileNotFoundException("The specified local bundle file does not exist.", fullPath);
+            }
             else
             {
-
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
 
