@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using ricaun.AppBundleTool.Utils;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -15,14 +16,14 @@ namespace ricaun.AppBundleTool.Tests
             var path = await BundleDownloadUtils.DownloadAsync(bundleUri);
             try
             {
-                System.Console.WriteLine(path);
-                Assert.IsTrue(System.IO.File.Exists(path), "Downloaded file should exist.");
+                Console.WriteLine(path);
+                Assert.IsTrue(File.Exists(path), "Downloaded file should exist.");
             }
             finally
             {
-                if (System.IO.File.Exists(path))
+                if (File.Exists(path))
                 {
-                    System.IO.File.Delete(path);
+                    File.Delete(path);
                 }
             }
         }
@@ -34,28 +35,28 @@ namespace ricaun.AppBundleTool.Tests
             var bundleUri = "https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle.zip";
             var path = await BundleDownloadUtils.DownloadAsync(bundleUri);
 
-            var tempDirectory = System.IO.Path.GetTempPath();
-            var pathMove = System.IO.Path.Combine(tempDirectory, fileName);
-            if (System.IO.File.Exists(pathMove))
-                System.IO.File.Delete(pathMove);
-            System.IO.File.Move(path, pathMove);
+            var tempDirectory = Path.GetTempPath();
+            var pathMove = Path.Combine(tempDirectory, fileName);
+            if (File.Exists(pathMove))
+                File.Delete(pathMove);
+            File.Move(path, pathMove);
 
             try
             {
-                System.Console.WriteLine(pathMove);
-                Assert.IsFalse(System.IO.File.Exists(path), "Downloaded file should exist.");
-                Assert.IsTrue(System.IO.File.Exists(pathMove), "Downloaded file should exist.");
+                Console.WriteLine(pathMove);
+                Assert.IsFalse(File.Exists(path), "Downloaded file should exist.");
+                Assert.IsTrue(File.Exists(pathMove), "Downloaded file should exist.");
 
-                Assert.AreEqual(fileName, System.IO.Path.GetFileName(pathMove), "File name should match expected.");
+                Assert.AreEqual(fileName, Path.GetFileName(pathMove), "File name should match expected.");
 
                 pathMove = await BundleDownloadUtils.DownloadAsync(pathMove);
 
-                Assert.AreEqual(expected, System.IO.Path.GetFileName(pathMove), "File name should match expected.");
+                Assert.AreEqual(expected, Path.GetFileName(pathMove), "File name should match expected.");
             }
             finally
             {
-                if (System.IO.File.Exists(pathMove))
-                    System.IO.File.Delete(pathMove);
+                if (File.Exists(pathMove))
+                    File.Delete(pathMove);
             }
         }
 
@@ -66,27 +67,27 @@ namespace ricaun.AppBundleTool.Tests
             var bundleUri = "https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle.zip";
             var path = await BundleDownloadUtils.DownloadAsync(bundleUri);
 
-            var pathMove = System.IO.Path.GetFullPath(fileName);
-            if (System.IO.File.Exists(pathMove))
-                System.IO.File.Delete(pathMove);
-            System.IO.File.Move(path, pathMove);
+            var pathMove = Path.GetFullPath(fileName);
+            if (File.Exists(pathMove))
+                File.Delete(pathMove);
+            File.Move(path, pathMove);
 
             try
             {
-                System.Console.WriteLine(pathMove);
-                Assert.IsFalse(System.IO.File.Exists(path), "Downloaded file should exist.");
-                Assert.IsTrue(System.IO.File.Exists(pathMove), "Downloaded file should exist.");
+                Console.WriteLine(pathMove);
+                Assert.IsFalse(File.Exists(path), "Downloaded file should exist.");
+                Assert.IsTrue(File.Exists(pathMove), "Downloaded file should exist.");
 
-                Assert.AreEqual(fileName, System.IO.Path.GetFileName(pathMove), "File name should match expected.");
+                Assert.AreEqual(fileName, Path.GetFileName(pathMove), "File name should match expected.");
 
                 pathMove = await BundleDownloadUtils.DownloadAsync(pathMove);
 
-                Assert.AreEqual(expected, System.IO.Path.GetFileName(pathMove), "File name should match expected.");
+                Assert.AreEqual(expected, Path.GetFileName(pathMove), "File name should match expected.");
             }
             finally
             {
-                if (System.IO.File.Exists(pathMove))
-                    System.IO.File.Delete(pathMove);
+                if (File.Exists(pathMove))
+                    File.Delete(pathMove);
             }
         }
 
@@ -95,9 +96,9 @@ namespace ricaun.AppBundleTool.Tests
         [TestCase("file.zip")]
         [TestCase("file2.zip")]
         [TestCase("https://github.com/ricaun-io/RevitAddin.CommandLoader/releases/latest/download/RevitAddin.CommandLoader.bundle")]
-        public async Task Download_Test_FileNotFoundException(string bundleUri)
+        public async Task Download_Test_Exception(string bundleUri)
         {
-            Assert.ThrowsAsync<FileNotFoundException>(async () =>
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await BundleDownloadUtils.DownloadAsync(bundleUri);
             });
