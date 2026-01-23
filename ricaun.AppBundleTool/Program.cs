@@ -22,8 +22,24 @@ namespace ricaun.AppBundleTool
 #endif
             var parser = Options.Parser.ParseArguments<Options>(args);
             displayHelp = DisplayHelp(parser);
-            parser.WithParsed<Options>(ExecuteCommand)
+            parser.WithParsed<Options>(ExecuteCommandException)
                   .WithNotParsed(ExecuteError);
+        }
+
+        private static void ExecuteCommandException(Options options)
+        {
+            try
+            {
+                ExecuteCommand(options);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message.ToConsoleRed()}");
+                if (options.Verbosity)
+                {
+                    Console.WriteLine(ex.ToConsoleYellow());
+                }
+            }
         }
 
         private static void ExecuteCommand(Options options)
