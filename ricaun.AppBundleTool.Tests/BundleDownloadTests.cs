@@ -103,5 +103,15 @@ namespace ricaun.AppBundleTool.Tests
                 await BundleDownloadUtils.DownloadAsync(bundleUri);
             });
         }
+
+        [TestCase("https://github.com/ricaun-io/RevitAddin.CommandLoader.bundle.zip")]
+        [TestCase("https://github.com/ricaun-io/AnyUrl.bundle.zip")]
+        public async Task Download_Test_Exception_FileNotValidZip(string bundleUri)
+        {
+            Assert.ThrowsAsync<System.Net.Http.HttpRequestException>(async () =>
+            {
+                await BundleDownloadUtils.DownloadAsync(bundleUri);
+            });
+        }
     }
 }

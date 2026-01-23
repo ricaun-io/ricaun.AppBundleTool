@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Updates
 - Update `NameAndVersionBundleUtils` with `RemoveVersionBundle` to remove version from bundle file name.
 - Update `BundleDownloadUtils` to support download url with parameters and local file path.
+- Update `BundleDownloadUtils` to use `BundleUri` with handling local file or url.
+- Update `BundleUri` to validate `zip` file when downloading from url.
 ### Tests
 - Add `BundleDownloadTests` to test download url with parameters.
 - Add `UriTests` to test uri with local files or urls.
