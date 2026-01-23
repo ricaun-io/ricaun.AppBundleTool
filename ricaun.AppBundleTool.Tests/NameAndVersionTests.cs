@@ -37,5 +37,34 @@ namespace ricaun.AppBundleTool.Tests
             Assert.IsNull(name);
             Assert.IsNull(version);
         }
+
+        [TestCase("MyLib.1.2.3.bundle", "MyLib.bundle")]
+        [TestCase("Plugin.3.4.5-beta.bundle", "Plugin.bundle")]
+        [TestCase("My.Lib.Core.2.0.0.bundle", "My.Lib.Core.bundle")]
+        [TestCase("ToolName.10.0.1-alpha.bundle", "ToolName.bundle")]
+        [TestCase("Library.1.0.0.1.bundle", "Library.bundle")] // supports 4 numeric parts
+        [TestCase("MyLib.bundle", "MyLib.bundle")]
+        [TestCase("MyLib.bundle.zip", "MyLib.bundle.zip")]
+        [TestCase("MyLib.1.2.3.bundle.zip", "MyLib.bundle.zip")]
+        public void RemoveVersionBundle_ValidNames(string fileName, string expectedName)
+        {
+            // Act
+            var result = NameAndVersionBundleUtils.RemoveVersionBundle(fileName);
+
+            // Assert
+            Assert.AreEqual(expectedName, result);
+        }
+
+        [TestCase("MyLib 1.2.3.bundle.zip")]
+        [TestCase("MyLib.test")]
+        public void RemoveVersionBundle_NotValidNames(string fileName)
+        {
+            // Act
+            var result = NameAndVersionBundleUtils.RemoveVersionBundle(fileName);
+
+            // Assert
+            var expectedName = fileName;
+            Assert.AreEqual(expectedName, result);
+        }
     }
 }
