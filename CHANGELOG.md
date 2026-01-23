@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.1.0] / 2026-01-23
 ### Features
 - Support download bundle with parameters in the url and local file path.
+- Support download from redirect url and validate zip file. `BundleUri`
 ### Fixes
 - Fix `Console` not supporting colors in some terminals. (Fix: #7)
 ### Updates
