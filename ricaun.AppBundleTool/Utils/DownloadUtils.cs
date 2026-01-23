@@ -69,65 +69,84 @@ namespace ricaun.AppBundleTool.Utils
         /// <returns>The path to the downloaded file.</returns>
         private static async Task<string> DownloadAsync(string tempFolder, string bundleUri, string authentication = null, double cacheTotalMinutes = CACHE_TOTAL_MINUTES)
         {
-            var uri = new Uri(bundleUri);
-            var appBundleName = Path.GetFileName(uri.LocalPath);
-
-            if (Path.GetExtension(appBundleName) != ".zip")
-                appBundleName += ".zip";
-
-            var bundlePath = Path.Combine(tempFolder, appBundleName);
-
-            if (File.Exists(bundlePath))
+            if (!Uri.TryCreate(bundleUri, UriKind.RelativeOrAbsolute, out var uri))
             {
-                var lastTime = File.GetLastWriteTime(bundlePath);
-                var now = DateTime.Now;
-                var diff = now - lastTime;
-                if (diff.TotalMinutes < cacheTotalMinutes)
+                throw new ArgumentException("Invalid bundle URI.", nameof(bundleUri));
+            }
+
+            if (!uri.IsAbsoluteUri) // Relative URI
+            {
+                var appBundleName = Path.GetFileName(uri.OriginalString);
+                if (Path.GetExtension(appBundleName) != ".zip")
+                    throw new FileNotFoundException("The specified local bundle file does not have a .zip extension.", uri.OriginalString);
+
+                var bundlePath = Path.Combine(tempFolder, appBundleName);
+                var fullPath = Path.GetFullPath(uri.OriginalString);
+                if (File.Exists(fullPath))
                 {
+                    File.Copy(fullPath, bundlePath, true);
                     return bundlePath;
                 }
+                throw new FileNotFoundException("The specified local bundle file does not exist.", fullPath);
             }
-
-            if (File.Exists(uri.LocalPath))
+            else
             {
-                File.Copy(uri.LocalPath, bundlePath, true);
+                var appBundleName = Path.GetFileName(uri.LocalPath);
+
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
+
+                if (string.IsNullOrWhiteSpace(authentication) == false)
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authentication}");
+
+                var response = await client.GetAsync(bundleUri, HttpCompletionOption.ResponseHeadersRead);
+
+                // Total size (might be null if server doesn't send Content-Length)
+                var contentLengthHeader = response.Content.Headers.ContentLength;
+                var contentLength = contentLengthHeader.HasValue ? contentLengthHeader.Value : -1L;
+
+                // Check Content-Disposition
+                if (response.Content.Headers.ContentDisposition?.FileName is not null)
+                {
+                    appBundleName = response.Content.Headers.ContentDisposition.FileName.Trim('\"');
+                }
+
+                if (Path.GetExtension(appBundleName) != ".zip")
+                    throw new FileNotFoundException("The specified local bundle file does not have a .zip extension.", uri.OriginalString);
+
+                var bundlePath = Path.Combine(tempFolder, appBundleName);
+
+                //if (File.Exists(bundlePath))
+                //{
+                //    var lastTime = File.GetLastWriteTime(bundlePath);
+                //    var now = DateTime.Now;
+                //    var diff = now - lastTime;
+                //    if (diff.TotalMinutes < cacheTotalMinutes)
+                //    {
+                //        return bundlePath;
+                //    }
+                //}
+
+                await using var contentStream = await response.Content.ReadAsStreamAsync();
+                await using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
+
+                var buffer = new byte[81920]; // 80 KB chunks
+                long totalRead = 0;
+                int read;
+                DownloadProgress?.Invoke(totalRead, contentLength);
+                do
+                {
+                    read = await contentStream.ReadAsync(buffer.AsMemory(0, buffer.Length));
+                    if (read == 0) break;
+
+                    await fileStream.WriteAsync(buffer.AsMemory(0, read));
+                    totalRead += read;
+
+                    DownloadProgress?.Invoke(totalRead, contentLength);
+                } while (true);
+
                 return bundlePath;
             }
-
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "AppBundleTool");
-
-            if (string.IsNullOrWhiteSpace(authentication) == false)
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authentication}");
-
-            var response = await client.GetAsync(bundleUri, HttpCompletionOption.ResponseHeadersRead);
-
-            //using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            //await response.Content.CopyToAsync(fileStream);
-
-            // Total size (might be null if server doesn't send Content-Length)
-            var contentLengthHeader = response.Content.Headers.ContentLength;
-            var contentLength = contentLengthHeader.HasValue ? contentLengthHeader.Value : -1L;
-
-            await using var contentStream = await response.Content.ReadAsStreamAsync();
-            await using var fileStream = new FileStream(bundlePath, FileMode.Create, FileAccess.Write, FileShare.None);
-
-            var buffer = new byte[81920]; // 80 KB chunks
-            long totalRead = 0;
-            int read;
-            DownloadProgress?.Invoke(totalRead, contentLength);
-            do
-            {
-                read = await contentStream.ReadAsync(buffer.AsMemory(0, buffer.Length));
-                if (read == 0) break;
-
-                await fileStream.WriteAsync(buffer.AsMemory(0, read));
-                totalRead += read;
-
-                DownloadProgress?.Invoke(totalRead, contentLength);
-            } while (true);
-
-            return bundlePath;
         }
 
         /// <summary>

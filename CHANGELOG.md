@@ -6,8 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.1.0] / 2026-01-23
 ### Features
+- Support download bundle with parameters in the url and local file path.
 ### Fixes
 - Fix `Console` not supporting colors in some terminals. (Fix: #7)
+### Updates
+- Update `NameAndVersionBundleUtils` with `RemoveVersionBundle` to remove version from bundle file name.
+### Tests
+- Add `BundleDownloadTests` to test download url with parameters.
+- Add `UriTests` to test uri with local files or urls.
 
 ## [1.0.5] / 2025-11-03
 ### Features
